@@ -189,8 +189,8 @@ The following table describes the different APIs and their current status in the
 | Renderer GPU API                       | 100.0%  |   0.0%    |
 | Renderer Observer API                  | 100.0%  |   0.0%    |
 | Sampler API                            | 100.0%  |   0.0%    |
-| Scene API                              | 100.0%  |   0.0%    |
-| Scene BSSRDF API                       | 100.0%  |   0.0%    |
+| Scene API                              | ???.?%  |   0.0%    |
+| Scene BSSRDF API                       | ???.?%  |   0.0%    |
 | Scene BXDF API                         | 100.0%  |   0.0%    |
 | Scene Compiler API                     | 100.0%  |   0.0%    |
 | Scene Fresnel API                      | 100.0%  |   0.0%    |

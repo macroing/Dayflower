@@ -18,7 +18,11 @@
  */
 package org.dayflower.scene.bssrdf;
 
+import java.lang.reflect.Field;//TODO: Add Javadocs!
+import java.util.Objects;
+
 import org.dayflower.geometry.Point2F;
+import org.dayflower.scene.BSSRDFResult;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
@@ -33,56 +37,56 @@ import org.macroing.art4j.color.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public final class TabulatedBSSRDF extends SeparableBSSRDF {
-	/**
-	 * Constructs a new {@code TabulatedBSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection}, {@code material} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param eta the index of refraction
-	 * @param material a {@link Material} instance
-	 * @param transportMode a {@link TransportMode} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code material} or {@code transportMode} are {@code null}
-	 */
-	public TabulatedBSSRDF(final Intersection intersection, final float eta, final Material material, final TransportMode transportMode) {
+	private final BSSRDFTable bSSRDFTable;
+	private final Color3F rho;
+	private final Color3F sigmaT;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public TabulatedBSSRDF(final Intersection intersection, final float eta, final Material material, final TransportMode transportMode, final Color3F sigmaA, final Color3F sigmaS, final BSSRDFTable bSSRDFTable) {
 		super(intersection, eta, material, transportMode);
+		
+		this.bSSRDFTable = Objects.requireNonNull(bSSRDFTable, "bSSRDFTable == null");
+		this.sigmaT = Color3F.add(sigmaA, sigmaS);
+		this.rho = new Color3F(this.sigmaT.r != 0.0F ? sigmaS.r / this.sigmaT.r : 0.0F, this.sigmaT.g != 0.0F ? sigmaS.g / this.sigmaT.g : 0.0F, this.sigmaT.b != 0.0F ? sigmaS.b / this.sigmaT.b : 0.0F);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Evaluates the distribution function for {@code distance}.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * 
-	 * @param distance a {@code float} that contains the distance
-	 * @return a {@code Color3F} instance
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public Color3F evaluateDistributionFunctionR(final float distance) {
+	public BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2) {
+		return null;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Color3F evaluateSR(final float distance) {
 		return Color3F.BLACK;
 	}
 	
-	/**
-	 * Samples the distribution function.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If either {@code scene}, {@code u2}, {@code intersection} or {@code pDF} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code pDF.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
-	 * 
-	 * @param scene a {@link Scene} instance
-	 * @param u1 a {@code float} that contains a sample
-	 * @param u2 a {@link Point2F} instance that contains a sample
-	 * @param intersection an {@link Intersection} instance
-	 * @param pDF a {@code float[]} that will be populated with the PDF value
-	 * @return a {@code Color3F} instance
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code pDF.length < 1}
-	 * @throws NullPointerException thrown if, and only if, either {@code scene}, {@code u2}, {@code intersection} or {@code pDF} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public Color3F sampleDistributionFunction(final Scene scene, final float u1, final Point2F u2, final Intersection intersection, final float[] pDF) {
-		return Color3F.BLACK;
+	public SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2) {
+		return null;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float evaluateProbabilityDensityFunctionSP(final Intersection intersection) {
+		return 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float evaluateProbabilityDensityFunctionSR(final int index, final float distance) {
+		return 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float sampleSR(final int index, final float u) {
+		return 0.0F;
 	}
 }

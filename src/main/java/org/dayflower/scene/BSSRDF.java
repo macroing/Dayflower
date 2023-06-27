@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene;
 
+import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
@@ -37,15 +38,7 @@ public abstract class BSSRDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Constructs a new {@code BSSRDF} instance.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param eta the index of refraction
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
+//	TODO: Add Javadocs!
 	protected BSSRDF(final Intersection intersection, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.eta = eta;
@@ -53,54 +46,18 @@ public abstract class BSSRDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Evaluates the distribution function.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param incoming a {@link Vector3F} instance that contains the incoming direction
-	 * @return a {@code Color3F} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
-	 */
-	public abstract Color3F evaluateDistributionFunction(final Intersection intersection, final Vector3F incoming);
+//	TODO: Add Javadocs!
+	public abstract BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2);
 	
-	/**
-	 * Samples the distribution function.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If either {@code scene}, {@code u2}, {@code intersection} or {@code pDF} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code pDF.length < 1}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
-	 * 
-	 * @param scene a {@link Scene} instance
-	 * @param u1 a {@code float} that contains a sample
-	 * @param u2 a {@link Point2F} instance that contains a sample
-	 * @param intersection an {@link Intersection} instance
-	 * @param pDF a {@code float[]} that will be populated with the PDF value
-	 * @return a {@code Color3F} instance
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code pDF.length < 1}
-	 * @throws NullPointerException thrown if, and only if, either {@code scene}, {@code u2}, {@code intersection} or {@code pDF} are {@code null}
-	 */
-	public abstract Color3F sampleDistributionFunction(final Scene scene, final float u1, final Point2F u2, final Intersection intersection, final float[] pDF);
+//	TODO: Add Javadocs!
+	public abstract Color3F evaluateS(final Intersection intersection, final Vector3F incoming);
 	
-	/**
-	 * Returns the {@link Intersection} instance associated with this {@code BSSRDF} instance.
-	 * 
-	 * @return the {@code Intersection} instance associated with this {@code BSSRDF} instance
-	 */
+//	TODO: Add Javadocs!
 	public final Intersection getIntersection() {
 		return this.intersection;
 	}
 	
-	/**
-	 * Returns the index of refraction associated with this {@code BSSRDF} instance.
-	 * 
-	 * @return the index of refraction associated with this {@code BSSRDF} instance
-	 */
+//	TODO: Add Javadocs!
 	public final float getEta() {
 		return this.eta;
 	}

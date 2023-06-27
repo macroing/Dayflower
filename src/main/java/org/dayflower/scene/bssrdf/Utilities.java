@@ -214,17 +214,17 @@ final class Utilities {
 		return phaseHG;
 	}
 	
-	public static float integrateCatmullRom(final int n, final float[] x, final float[] values, final float[] cDF) {
+	public static float integrateCatmullRom(final int n, final float[] x, final float[] values, final float[] cDF, final int valuesOffset, final int cDFOffset) {
 		float sum = 0.0F;
 		
-		cDF[0] = 0.0F;
+		cDF[cDFOffset] = 0.0F;
 		
 		for(int i = 0; i < n - 1; i++) {
 			final float x0 = x[i + 0];
 			final float x1 = x[i + 1];
 			
-			final float f0 = values[i + 0];
-			final float f1 = values[i + 1];
+			final float f0 = values[valuesOffset + i + 0];
+			final float f1 = values[valuesOffset + i + 1];
 			
 			final float width = x1 - x0;
 			
@@ -232,20 +232,20 @@ final class Utilities {
 			float d1;
 			
 			if(i > 0) {
-				d0 = width * (f1 - values[i - 1]) / (x1 - x[i - 1]);
+				d0 = width * (f1 - values[valuesOffset + i - 1]) / (x1 - x[i - 1]);
 			} else {
 				d0 = f1 - f0;
 			}
 			
 			if(i + 2 < n) {
-				d1 = width * (values[i + 2] - f0) / (x[i + 2] - x0);
+				d1 = width * (values[valuesOffset + i + 2] - f0) / (x[i + 2] - x0);
 			} else {
 				d1 = f1 - f0;
 			}
 			
 			sum += ((d0 - d1) * (1.0F / 12.0F) + (f0 + f1) * 0.5F) * width;
 			
-			cDF[i + 1] = sum;
+			cDF[cDFOffset + i + 1] = sum;
 		}
 		
 		return sum;

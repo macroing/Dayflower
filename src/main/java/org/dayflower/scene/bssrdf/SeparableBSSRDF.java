@@ -18,13 +18,16 @@
  */
 package org.dayflower.scene.bssrdf;
 
+import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 
@@ -47,17 +50,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Constructs a new {@code SeparableBSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection}, {@code material} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param eta the index of refraction
-	 * @param material a {@link Material} instance
-	 * @param transportMode a {@link TransportMode} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code material} or {@code transportMode} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	protected SeparableBSSRDF(final Intersection intersection, final float eta, final Material material, final TransportMode transportMode) {
 		super(intersection, eta);
 		
@@ -71,64 +64,38 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Evaluates the distribution function.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param incoming a {@link Vector3F} instance that contains the incoming direction
-	 * @return a {@code Color3F} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public Color3F evaluateDistributionFunction(final Intersection intersection, final Vector3F incoming) {
+	public Color3F evaluateS(final Intersection intersection, final Vector3F incoming) {
 		final float f = DielectricFresnel.evaluate(Vector3F.negate(getIntersection().getRay().getDirection()).cosTheta(), 1.0F, getEta());
 		
-		return Color3F.multiply(Color3F.multiply(evaluateDistributionFunctionProfile(intersection), 1.0F - f), evaluateDistributionFunctionIncoming(incoming));
+		return Color3F.multiply(Color3F.multiply(evaluateSP(intersection), 1.0F - f), evaluateSW(incoming));
 	}
 	
-	/**
-	 * Evaluates the distribution function for {@code incoming}.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If {@code incoming} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param incoming a {@link Vector3F} instance that contains the incoming direction
-	 * @return a {@code Color3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code incoming} is {@code null}
-	 */
-	public Color3F evaluateDistributionFunctionIncoming(final Vector3F incoming) {
+//	TODO: Add Javadocs!
+	public Color3F evaluateSP(final Intersection intersection) {
+		return evaluateSR(Point3F.distance(getIntersection().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionPoint()));
+	}
+	
+//	TODO: Add Javadocs!
+	public Color3F evaluateSW(final Vector3F incoming) {
 		final float c = 1.0F - 2.0F * Utilities.computeFresnelMoment1(1.0F / getEta());
 		
 		return new Color3F((1.0F - DielectricFresnel.evaluate(incoming.cosTheta(), 1.0F, getEta())) / (c * Floats.PI));
 	}
 	
-	/**
-	 * Evaluates the distribution function for {@code intersection}.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public Color3F evaluateDistributionFunctionProfile(final Intersection intersection) {
-		return evaluateDistributionFunctionR(Point3F.distance(getIntersection().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionPoint()));
-	}
+//	TODO: Add Javadocs!
+	public abstract Color3F evaluateSR(final float distance);
 	
-	/**
-	 * Evaluates the distribution function for {@code distance}.
-	 * <p>
-	 * Returns a {@code Color3F} instance.
-	 * 
-	 * @param distance a {@code float} that contains the distance
-	 * @return a {@code Color3F} instance
-	 */
-	public abstract Color3F evaluateDistributionFunctionR(final float distance);
+//	TODO: Add Javadocs!
+	public abstract SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2);
+	
+//	TODO: Add Javadocs!
+	public abstract float evaluateProbabilityDensityFunctionSP(final Intersection intersection);
+	
+//	TODO: Add Javadocs!
+	public abstract float evaluateProbabilityDensityFunctionSR(final int index, final float distance);
+	
+//	TODO: Add Javadocs!
+	public abstract float sampleSR(final int index, final float u);
 }

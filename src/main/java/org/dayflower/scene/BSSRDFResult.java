@@ -20,7 +20,9 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
+import java.util.Optional;
 
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.utility.Floats;
 import org.macroing.art4j.color.Color3F;
 
@@ -29,24 +31,30 @@ public final class BSSRDFResult {
 	private final BSDF bSDF;
 	private final Color3F result;
 	private final Intersection intersection;
+	private final Vector3F outgoing;
 	private final float probabilityDensityFunctionValue;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public BSSRDFResult(final BSDF bSDF, final Color3F result, final Intersection intersection, final float probabilityDensityFunctionValue) {
-		this.bSDF = Objects.requireNonNull(bSDF, "bSDF == null");
+	public BSSRDFResult(final Color3F result, final Intersection intersection, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
+		this.bSDF = null;
+		this.outgoing = null;
+	}
+	
+//	TODO: Add Javadocs!
+	public BSSRDFResult(final Color3F result, final Intersection intersection, final float probabilityDensityFunctionValue, final BSDF bSDF, final Vector3F outgoing) {
+		this.result = Objects.requireNonNull(result, "result == null");
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
+		this.bSDF = Objects.requireNonNull(bSDF, "bSDF == null");
+		this.outgoing = Objects.requireNonNull(outgoing, "outgoing == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-//	TODO: Add Javadocs!
-	public BSDF getBSDF() {
-		return this.bSDF;
-	}
 	
 //	TODO: Add Javadocs!
 	public Color3F getResult() {
@@ -56,6 +64,16 @@ public final class BSSRDFResult {
 //	TODO: Add Javadocs!
 	public Intersection getIntersection() {
 		return this.intersection;
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<BSDF> getBSDF() {
+		return Optional.ofNullable(this.bSDF);
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Vector3F> getOutgoing() {
+		return Optional.ofNullable(this.outgoing);
 	}
 	
 //	TODO: Add Javadocs!
@@ -70,6 +88,8 @@ public final class BSSRDFResult {
 		} else if(!Objects.equals(this.result, BSSRDFResult.class.cast(object).result)) {
 			return false;
 		} else if(!Objects.equals(this.intersection, BSSRDFResult.class.cast(object).intersection)) {
+			return false;
+		} else if(!Objects.equals(this.outgoing, BSSRDFResult.class.cast(object).outgoing)) {
 			return false;
 		} else if(!Floats.equal(this.probabilityDensityFunctionValue, BSSRDFResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
@@ -86,6 +106,6 @@ public final class BSSRDFResult {
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.bSDF, this.result, this.intersection, Float.valueOf(this.probabilityDensityFunctionValue));
+		return Objects.hash(this.bSDF, this.result, this.intersection, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 }

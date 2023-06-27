@@ -24,7 +24,9 @@ import java.util.Objects;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDFResult;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
@@ -60,13 +62,72 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 //	TODO: Add Javadocs!
 	@Override
 	public BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2) {
-		return null;
+		final SeparableBSSRDFResult separableBSSRDFResult = sampleSP(scene, u1, u2);
+		
+		final Color3F result = separableBSSRDFResult.getResult();
+		
+		final Intersection intersection = separableBSSRDFResult.getIntersection();
+		
+		final float probabilityDensityFunctionValue = separableBSSRDFResult.getProbabilityDensityFunctionValue();
+		
+		if(!result.isBlack()) {
+			final BXDF bXDF = new SeparableBSSRDFBXDF(this);
+			
+			final BSDF bSDF = new BSDF(separableBSSRDFResult.getIntersection(), bXDF);
+			
+			final Vector3F outgoing = intersection.getSurfaceNormalS();
+			
+			return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue, bSDF, outgoing);
+		}
+		
+		return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue);
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F evaluateSR(final float distance) {
-		return Color3F.BLACK;
+		final float[] srResult = {0.0F, 0.0F, 0.0F};
+		final float[] sigmaT = {this.sigmaT.r, this.sigmaT.g, this.sigmaT.b};
+		final float[] rho = {this.rho.r, this.rho.g, this.rho.b};
+		
+		for(int i = 0; i < 3; i++) {
+			final float rOptical = distance * sigmaT[i];
+			
+			final int[] rhoOffset = new int[1];
+			final int[] radiusOffset = new int[1];
+			
+			final float[] rhoWeights = new float[4];
+			final float[] radiusWeights = new float[4];
+			
+			if(!Utilities.catmullRomWeights(this.bSSRDFTable.getRhoSamples().length, this.bSSRDFTable.getRhoSamples(), rho[i], rhoOffset, rhoWeights) || !Utilities.catmullRomWeights(this.bSSRDFTable.getRadiusSamples().length, this.bSSRDFTable.getRadiusSamples(), rOptical, radiusOffset, radiusWeights)) {
+				continue;
+			}
+			
+			float sr = 0.0F;
+			
+			for(int j = 0; j < 4; j++) {
+				for(int k = 0; k < 4; k++) {
+					final float weight = rhoWeights[j] * radiusWeights[k];
+					
+					if(weight != 0.0F) {
+						sr += weight * this.bSSRDFTable.evaluateProfile(rhoOffset[0] + j, radiusOffset[0] + k);
+					}
+				}
+			}
+			
+			if(rOptical != 0.0F) {
+				sr /= Floats.PI_MULTIPLIED_BY_2 * rOptical;
+			}
+			
+			srResult[i] = sr;
+		}
+		
+		for(int i = 0; i < 3; i++) {
+			srResult[i] *= sigmaT[i] * sigmaT[i];
+			srResult[i] = Floats.saturate(srResult[i]);
+		}
+		
+		return new Color3F(srResult[0], srResult[1], srResult[2]);
 	}
 	
 //	TODO: Add Javadocs!
@@ -114,7 +175,40 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 //	TODO: Add Javadocs!
 	@Override
 	public float evaluateProbabilityDensityFunctionSR(final int index, final float distance) {
-		return 0.0F;
+		final float rOptical = distance * doGetComponentAt(this.sigmaT, index);
+		
+		final int[] rhoOffset = new int[1];
+		final int[] radiusOffset = new int[1];
+		
+		final float[] rhoWeights = new float[4];
+		final float[] radiusWeights = new float[4];
+		
+		if(!Utilities.catmullRomWeights(this.bSSRDFTable.getRhoSamples().length, this.bSSRDFTable.getRhoSamples(), doGetComponentAt(this.rho, index), rhoOffset, rhoWeights) || !Utilities.catmullRomWeights(this.bSSRDFTable.getRadiusSamples().length, this.bSSRDFTable.getRadiusSamples(), rOptical, radiusOffset, radiusWeights)) {
+			return 0.0F;
+		}
+		
+		float sr = 0.0F;
+		float rhoEff = 0.0F;
+		
+		for(int i = 0; i < 4; i++) {
+			if(rhoWeights[i] == 0.0F) {
+				continue;
+			}
+			
+			for(int j = 0; j < 4; j++) {
+				if(radiusWeights[j] == 0.0F) {
+					continue;
+				}
+				
+				sr += this.bSSRDFTable.evaluateProfile(rhoOffset[0] + i, radiusOffset[0] + j) * rhoWeights[i] * radiusWeights[j];
+			}
+		}
+		
+		if(rOptical != 0.0F) {
+			sr /= Floats.PI_MULTIPLIED_BY_2 * rOptical;
+		}
+		
+		return Floats.max(0.0F, sr * doGetComponentAt(this.sigmaT, index) * doGetComponentAt(this.sigmaT, index) / rhoEff);
 	}
 	
 //	TODO: Add Javadocs!

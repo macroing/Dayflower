@@ -88,6 +88,11 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	public abstract Color3F evaluateSR(final float distance);
 	
 //	TODO: Add Javadocs!
+	public final Material getMaterial() {
+		return this.material;
+	}
+	
+//	TODO: Add Javadocs!
 	public abstract SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2);
 	
 //	TODO: Add Javadocs!

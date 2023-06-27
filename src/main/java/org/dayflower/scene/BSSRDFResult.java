@@ -39,7 +39,7 @@ public final class BSSRDFResult {
 //	TODO: Add Javadocs!
 	public BSSRDFResult(final Color3F result, final Intersection intersection, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
-		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.intersection = intersection;
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 		this.bSDF = null;
 		this.outgoing = null;

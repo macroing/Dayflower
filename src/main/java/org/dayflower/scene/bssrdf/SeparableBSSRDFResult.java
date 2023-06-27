@@ -37,7 +37,7 @@ public final class SeparableBSSRDFResult {
 //	TODO: Add Javadocs!
 	public SeparableBSSRDFResult(final Color3F result, final Intersection intersection, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
-		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.intersection = intersection;
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
 	

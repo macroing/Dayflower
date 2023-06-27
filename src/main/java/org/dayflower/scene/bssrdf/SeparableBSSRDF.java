@@ -91,6 +91,11 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	public abstract SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2);
 	
 //	TODO: Add Javadocs!
+	public final TransportMode getTransportMode() {
+		return this.transportMode;
+	}
+	
+//	TODO: Add Javadocs!
 	public abstract float evaluateProbabilityDensityFunctionSP(final Intersection intersection);
 	
 //	TODO: Add Javadocs!

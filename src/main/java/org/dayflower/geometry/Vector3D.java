@@ -249,6 +249,29 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns the component at {@code index}.
+	 * <p>
+	 * If {@code index < 0 || index >= 3}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the component
+	 * @return the component at {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index < 0 || index >= 3}
+	 */
+//	TODO: Add Unit Tests!
+	public double getComponentAt(final int index) {
+		switch(index) {
+			case 0:
+				return this.x;
+			case 1:
+				return this.y;
+			case 2:
+				return this.z;
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
+	
+	/**
 	 * Returns the length of this {@code Vector3D} instance.
 	 * 
 	 * @return the length of this {@code Vector3D} instance

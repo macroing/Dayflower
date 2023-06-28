@@ -201,15 +201,18 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		final Point3F p2 = Point3F.add(p1, vz, l);
 		
 		Intersection intersection = null;
+		
 		IntersectionChain intersectionChain = new IntersectionChain();
 		IntersectionChain intersectionChainFirst = intersectionChain;
 		
 		int found = 0;
 		
+		final Vector3F zero = new Vector3F(0.0F, 0.0F, 0.0F);
+		
 		for(int i = 0; i < 1000; i++) {
 			final Ray3F ray = intersection == null ? new Ray3F(p1, Vector3F.directionNormalized(p1, p2)) : intersection.createRay(p2);
 			
-			if(ray.getDirection().equals(new Vector3F(0.0F, 0.0F, 0.0F))) {
+			if(ray.getDirection().equals(zero)) {
 				break;
 			}
 			

@@ -550,7 +550,7 @@ public final class Scene implements Node {
 					
 					final float probabilityDensityFunctionValue2 = bSSRDFResult.getProbabilityDensityFunctionValue();
 					
-					if(result2.isBlack() || Floats.isZero(probabilityDensityFunctionValue2)) {
+					if(result2.isBlack() || result2.hasInfinites() || result2.hasNaNs() || Floats.isZero(probabilityDensityFunctionValue2) || !Floats.isFinite(probabilityDensityFunctionValue2)) {
 						break;
 					}
 					
@@ -560,11 +560,11 @@ public final class Scene implements Node {
 					
 					final Intersection intersection2 = bSSRDFResult.getIntersection();
 					
-					throughput = Color3F.multiply(throughput, Color3F.divide(throughput, probabilityDensityFunctionValue2));
+					throughput = Color3F.multiply(throughput, Color3F.divide(result2, probabilityDensityFunctionValue2));
 					
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF2, intersection2)));
 					
-					final Optional<BSDFResult> optionalBSDFResult2 = bSDF2.sampleDistributionFunction(bXDFType, new Point2F(u3.getComponent1(), u3.getComponent2()));
+					final Optional<BSDFResult> optionalBSDFResult2 = bSDF2.sampleDistributionFunction(BXDFType.ALL, new Point2F(u3.getComponent1(), u3.getComponent2()));
 					
 					if(!optionalBSDFResult2.isPresent()) {
 						break;
@@ -576,7 +576,7 @@ public final class Scene implements Node {
 					
 					final float probabilityDensityFunctionValue3 = bSDFResult2.getProbabilityDensityFunctionValue();
 					
-					if(result3.isBlack() || Floats.isZero(probabilityDensityFunctionValue3)) {
+					if(result3.isBlack() || result3.hasInfinites() || result3.hasNaNs() || Floats.isZero(probabilityDensityFunctionValue3) || !Floats.isFinite(probabilityDensityFunctionValue3)) {
 						break;
 					}
 					

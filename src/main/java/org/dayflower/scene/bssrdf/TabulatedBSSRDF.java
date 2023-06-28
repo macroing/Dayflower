@@ -77,9 +77,9 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		if(!result.isBlack() && intersection != null) {
 			final BXDF bXDF = new SeparableBSSRDFBXDF(this);
 			
-			final BSDF bSDF = new BSDF(separableBSSRDFResult.getIntersection(), bXDF);
-			
 			final Vector3F outgoing = intersection.getSurfaceNormalS();
+			
+			final BSDF bSDF = new BSDF(separableBSSRDFResult.getIntersection(), bXDF, outgoing);
 			
 			return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue, bSDF, outgoing);
 		}
@@ -206,7 +206,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		
 		int found = 0;
 		
-		while(true) {
+		for(int i = 0; i < 1000; i++) {
 			final Ray3F ray = intersection == null ? new Ray3F(p1, Vector3F.directionNormalized(p1, p2)) : intersection.createRay(p2);
 			
 			if(ray.getDirection().equals(new Vector3F(0.0F, 0.0F, 0.0F))) {
@@ -311,6 +311,8 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 			if(rhoWeights[i] == 0.0F) {
 				continue;
 			}
+			
+			rhoEff += this.bSSRDFTable.getRhoEff()[rhoOffset[0] + i] * rhoWeights[i];
 			
 			for(int j = 0; j < 4; j++) {
 				if(radiusWeights[j] == 0.0F) {

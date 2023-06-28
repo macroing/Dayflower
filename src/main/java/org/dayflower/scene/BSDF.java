@@ -74,6 +74,27 @@ public final class BSDF {
 	/**
 	 * Constructs a new {@code BSDF} instance.
 	 * <p>
+	 * If either {@code intersection}, {@code bXDF} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param bXDF a {@link BXDF} instance
+	 * @param outgoing the outgoing direction
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDF} or {@code outgoing} are {@code null}
+	 */
+	public BSDF(final Intersection intersection, final BXDF bXDF, final Vector3F outgoing) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
+		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
+		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
+		this.outgoingWorldSpace = Objects.requireNonNull(outgoing, "outgoing == null");
+		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
+		this.isNegatingIncoming = false;
+		this.eta = 1.0F;
+	}
+	
+	/**
+	 * Constructs a new {@code BSDF} instance.
+	 * <p>
 	 * If either {@code intersection} or {@code bXDF} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

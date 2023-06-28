@@ -38,6 +38,7 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.Sample1F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.utility.ParameterArguments;
@@ -533,6 +534,60 @@ public final class Scene implements Node {
 				}
 				
 				currentRay = intersection.createRay(incoming);
+				
+				final Optional<BSSRDF> optionalBSSRDF = scatteringFunctions.getBSSRDF();
+				
+				if(optionalBSSRDF.isPresent() && bXDFType.hasTransmission()) {
+					final BSSRDF bSSRDF = optionalBSSRDF.get();
+					
+					final Sample1F u1 = sampler.sample1();
+					final Sample2F u2 = sampler.sample2();
+					final Sample2F u3 = sampler.sample2();
+					
+					final BSSRDFResult bSSRDFResult = bSSRDF.sampleS(this, u1.getComponent1(), new Point2F(u2.getComponent1(), u2.getComponent2()));
+					
+					final Color3F result2 = bSSRDFResult.getResult();
+					
+					final float probabilityDensityFunctionValue2 = bSSRDFResult.getProbabilityDensityFunctionValue();
+					
+					if(result2.isBlack() || Floats.isZero(probabilityDensityFunctionValue2)) {
+						break;
+					}
+					
+					final Optional<BSDF> optionalBSDF2 = bSSRDFResult.getBSDF();
+					
+					final BSDF bSDF2 = optionalBSDF2.get();
+					
+					final Intersection intersection2 = bSSRDFResult.getIntersection();
+					
+					throughput = Color3F.multiply(throughput, Color3F.divide(throughput, probabilityDensityFunctionValue2));
+					
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF2, intersection2)));
+					
+					final Optional<BSDFResult> optionalBSDFResult2 = bSDF2.sampleDistributionFunction(bXDFType, new Point2F(u3.getComponent1(), u3.getComponent2()));
+					
+					if(!optionalBSDFResult2.isPresent()) {
+						break;
+					}
+					
+					final BSDFResult bSDFResult2 = optionalBSDFResult2.get();
+					
+					final Color3F result3 = bSDFResult2.getResult();
+					
+					final float probabilityDensityFunctionValue3 = bSDFResult2.getProbabilityDensityFunctionValue();
+					
+					if(result3.isBlack() || Floats.isZero(probabilityDensityFunctionValue3)) {
+						break;
+					}
+					
+					final Vector3F incoming2 = bSDFResult2.getIncoming();
+					
+					throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result3, Vector3F.dotProductAbs(incoming2, intersection2.getSurfaceNormalS())), probabilityDensityFunctionValue3));
+					
+					isSpecularBounce = bSDFResult2.getBXDFType().isSpecular();
+					
+					currentRay = intersection2.createRay(incoming2);
+				}
 				
 				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 				

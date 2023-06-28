@@ -20,6 +20,7 @@ package org.dayflower.scene.bssrdf;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
+import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 
 //TODO: Add Javadocs!
@@ -42,6 +43,24 @@ public final class BSSRDFTable {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public Color3F[] computeSubsurfaceFromDiffuse(final Color3F rhoEff, final Color3F mfp) {
+		final float[] sigmaA = {0.0F, 0.0F, 0.0F};
+		final float[] sigmaS = {0.0F, 0.0F, 0.0F};
+		
+		for(int i = 0; i < 3; i++) {
+			final float rho = Utilities.invertCatmullRom(this.rhoSamples.length, this.rhoSamples, this.rhoEff, doGetComponentAt(rhoEff, i));
+			
+			sigmaS[i] = rho / doGetComponentAt(mfp, i);
+			sigmaA[i] = (1.0F - rho) / doGetComponentAt(mfp, i);
+		}
+		
+		return new Color3F[] {
+			new Color3F(sigmaA[0], sigmaA[1], sigmaA[2]),
+			new Color3F(sigmaS[0], sigmaS[1], sigmaS[2])
+		};
+	}
 	
 //	TODO: Add Javadocs!
 	public float evaluateProfile(final int rhoIndex, final int radiusIndex) {
@@ -95,6 +114,21 @@ public final class BSSRDFTable {
 			}
 			
 			this.rhoEff[i] = Utilities.integrateCatmullRom(this.radiusSamples.length, this.radiusSamples, this.profile, this.profileCDF, i * this.radiusSamples.length, i * this.radiusSamples.length);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float doGetComponentAt(final Color3F color, final int index) {
+		switch(index) {
+			case 0:
+				return color.r;
+			case 1:
+				return color.g;
+			case 2:
+				return color.b;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 }

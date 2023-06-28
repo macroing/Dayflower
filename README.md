@@ -196,7 +196,7 @@ The following table describes the different APIs and their current status in the
 | Scene Fresnel API                      | 100.0%  |   0.0%    |
 | Scene Light API                        | 100.0%  |   0.0%    |
 | Scene Loader API                       | 100.0%  |   0.0%    |
-| Scene Material API                     | 100.0%  |   0.0%    |
+| Scene Material API                     | ???.?%  |   0.0%    |
 | Scene Microfacet API                   | 100.0%  |   0.0%    |
 | Scene Modifier API                     | 100.0%  |   0.0%    |
 | Scene Texture API                      | 100.0%  |   0.0%    |

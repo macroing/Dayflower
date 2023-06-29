@@ -2358,7 +2358,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBSDFResultInitialize(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
-		doBSDFResultSetNormalFromIntersection(rayDirectionX, rayDirectionY, rayDirectionZ);
+		doBSDFResultSetNormalFromIntersection();
 		doBSDFResultSetOutgoing(-rayDirectionX, -rayDirectionY, -rayDirectionZ);
 		
 		orthonormalBasis33FSetIntersectionOrthonormalBasisSLHS();
@@ -2397,16 +2397,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFResultArray_$private$16[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
 	}
 	
-	private void doBSDFResultSetNormalFromIntersection(final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+	private void doBSDFResultSetNormalFromIntersection() {
 		final float surfaceNormalX = intersectionLHSGetOrthonormalBasisSWX();
 		final float surfaceNormalY = intersectionLHSGetOrthonormalBasisSWY();
 		final float surfaceNormalZ = intersectionLHSGetOrthonormalBasisSWZ();
-		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
-		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
-		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
-		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
 		
-		doBSDFResultSetNormal(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+		doBSDFResultSetNormal(surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 	}
 	
 	private void doBSDFResultSetOutgoing(final float x, final float y, final float z) {

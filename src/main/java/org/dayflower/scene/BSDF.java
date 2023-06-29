@@ -84,7 +84,7 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final BXDF bXDF, final Vector3F outgoing) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
-		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
+		this.normalWorldSpace = intersection.getSurfaceNormalS();
 		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
 		this.outgoingWorldSpace = Objects.requireNonNull(outgoing, "outgoing == null");
 		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
@@ -127,7 +127,7 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final BXDF bXDF, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
-		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
+		this.normalWorldSpace = intersection.getSurfaceNormalS();
 		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
 		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
 		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
@@ -196,7 +196,7 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
-		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
+		this.normalWorldSpace = intersection.getSurfaceNormalS();
 		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
 		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
 		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));

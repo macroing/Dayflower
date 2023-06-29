@@ -81,7 +81,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 			
 			final BSDF bSDF = new BSDF(separableBSSRDFResult.getIntersection(), bXDF, outgoing);
 			
-			return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue, bSDF, outgoing);
+			return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue, bSDF);
 		}
 		
 		return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue);
@@ -209,7 +209,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		
 		final Vector3F zero = new Vector3F(0.0F, 0.0F, 0.0F);
 		
-		for(int i = 0; i < 1000; i++) {
+		for(int i = 0; i < 100; i++) {
 			final Ray3F ray = intersection == null ? new Ray3F(p1, Vector3F.directionNormalized(p1, p2)) : intersection.createRay(p2);
 			
 			if(ray.getDirection().equals(zero)) {
@@ -261,15 +261,11 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 	public float evaluateProbabilityDensityFunctionSP(final Intersection intersection) {
 		final OrthonormalBasis33F orthonormalBasis = getIntersection().getOrthonormalBasisS();
 		
-		final Vector3F u = orthonormalBasis.u;
-		final Vector3F v = orthonormalBasis.v;
-		final Vector3F w = orthonormalBasis.w;
-		
 		final Vector3F d = Vector3F.direction(intersection.getSurfaceIntersectionPoint(), getIntersection().getSurfaceIntersectionPoint());
-		final Vector3F dLocal = new Vector3F(Vector3F.dotProduct(u, d), Vector3F.dotProduct(v, d), Vector3F.dotProduct(w, d));
+		final Vector3F dLocal = Vector3F.transformReverse(d, orthonormalBasis);
 		
 		final Vector3F n = intersection.getSurfaceNormalS();
-		final Vector3F nLocal = new Vector3F(Vector3F.dotProduct(u, n), Vector3F.dotProduct(v, n), Vector3F.dotProduct(w, n));
+		final Vector3F nLocal = Vector3F.normalize(Vector3F.transformReverse(n, orthonormalBasis));
 		
 		final float[] rProj = {
 			Floats.sqrt(dLocal.y * dLocal.y + dLocal.z * dLocal.z),

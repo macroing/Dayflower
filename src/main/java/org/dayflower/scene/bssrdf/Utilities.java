@@ -358,7 +358,7 @@ final class Utilities {
 		v = (v - interpolate(cDF, index, weights, offset[0], size2)) / width;
 		
 		if(index > 0) {
-			d0 = width * (f1 - interpolate(values, index - 1, weights, offset[0], size2)) / (nodes2[index + 2] - x0);
+			d0 = width * (f1 - interpolate(values, index - 1, weights, offset[0], size2)) / (x1 - nodes2[index - 1]);
 		} else {
 			d0 = f1 - f0;
 		}

@@ -290,7 +290,7 @@ public final class BSDF {
 		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalGCorrectlyOriented();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
 		final float iDotN = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG);
 		final float oDotN = Vector3F.dotProduct(this.outgoingWorldSpace, surfaceNormalG);
@@ -356,7 +356,7 @@ public final class BSDF {
 		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
 		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalGCorrectlyOriented();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
 		Color3F result = bXDFResult.getResult();
 		

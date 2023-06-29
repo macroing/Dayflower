@@ -758,10 +758,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				final float normalX = intersectionLHSGetOrthonormalBasisGWX();
 				final float normalY = intersectionLHSGetOrthonormalBasisGWY();
 				final float normalZ = intersectionLHSGetOrthonormalBasisGWZ();
-				final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
-				final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
-				final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
-				final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 				
 				float probabilityDensityFunctionValue = doBXDFResultGetProbabilityDensityFunctionValue();
 				
@@ -770,8 +766,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				float resultB = doBXDFResultGetResultB();
 				
 				if(!doBXDFIsSpecular(matchingId)) {
-					final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
-					final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+					final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
+					final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 					
 					final boolean isReflecting = iDotN * oDotN > 0.0F;
 					
@@ -938,13 +934,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalX = intersectionLHSGetOrthonormalBasisGWX();
 		final float normalY = intersectionLHSGetOrthonormalBasisGWY();
 		final float normalZ = intersectionLHSGetOrthonormalBasisGWZ();
-		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
-		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
-		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
-		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
 		
-		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
-		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
+		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
 		final boolean isReflecting = iDotN * oDotN > 0.0F;
 		

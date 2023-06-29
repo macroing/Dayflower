@@ -500,8 +500,8 @@ public final class Scene implements Node {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF, intersection)));
 				}
 				
-				final Vector3F surfaceNormalG = intersection.getSurfaceNormalGCorrectlyOriented();
-				final Vector3F surfaceNormalS = intersection.getSurfaceNormalSCorrectlyOriented();
+				final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
+				final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
 				
 				final Sample2F sample = sampler.sample2();
 				

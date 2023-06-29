@@ -79,7 +79,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 			
 			final Vector3F outgoing = intersection.getSurfaceNormalS();
 			
-			final BSDF bSDF = new BSDF(separableBSSRDFResult.getIntersection(), bXDF, outgoing);
+			final BSDF bSDF = new BSDF(intersection, bXDF, outgoing);
 			
 			return new BSSRDFResult(result, intersection, probabilityDensityFunctionValue, bSDF);
 		}

@@ -128,7 +128,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		
 		for(int i = 0; i < 3; i++) {
 			srResult[i] *= sigmaT[i] * sigmaT[i];
-			srResult[i] = Floats.saturate(srResult[i]);
+			srResult[i] = Floats.saturate(srResult[i], 0.0F, Floats.MAX_VALUE);
 		}
 		
 		return new Color3F(srResult[0], srResult[1], srResult[2]);

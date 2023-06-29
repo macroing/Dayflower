@@ -43,10 +43,6 @@ import org.macroing.java.lang.Floats;
 public abstract class SeparableBSSRDF extends BSSRDF {
 	private final Material material;
 	private final TransportMode transportMode;
-	private final Vector3F normalLocalSpace;
-	private final Vector3F normalWorldSpace;
-	private final Vector3F outgoingLocalSpace;
-	private final Vector3F outgoingWorldSpace;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -56,10 +52,6 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 		
 		this.material = Objects.requireNonNull(material, "material == null");
 		this.transportMode = Objects.requireNonNull(transportMode, "transportMode == null");
-		this.normalWorldSpace = intersection.getSurfaceNormalSCorrectlyOriented();
-		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
-		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
-		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -276,7 +276,7 @@ public final class PerezLight extends Light {
 		
 		final float random = random();
 		
-		final boolean isSamplingSun = Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalGCorrectlyOriented()) > random && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalSCorrectlyOriented()) > random;
+		final boolean isSamplingSun = Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalG()) > random && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalS()) > random;
 		
 		if(isSamplingSun) {
 			final Vector3F incomingObjectSpace = this.sunDirectionObjectSpace;

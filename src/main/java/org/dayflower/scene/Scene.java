@@ -1534,7 +1534,7 @@ public final class Scene implements Node {
 		
 		final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 		
-		final Vector3F normal = intersection.getSurfaceNormalSCorrectlyOriented();
+		final Vector3F normal = intersection.getSurfaceNormalS();
 		
 		if(light.isUsingDeltaDistribution() && optionalLightSample.isPresent()) {
 			final LightSample lightSample = optionalLightSample.get();

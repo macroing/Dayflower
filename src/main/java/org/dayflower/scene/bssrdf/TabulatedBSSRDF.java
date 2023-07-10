@@ -169,7 +169,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 			u3 = (u3 - 0.75F) * 4.0F;
 		}
 		
-		final int index = Ints.saturate((int)(u3 * 3), 0, 2);
+		final int index = Ints.saturate((int)(u3 * 3.0F), 0, 2);
 		
 		u3 = u3 * 3 - index;
 		
@@ -265,7 +265,7 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 		final Vector3F dLocal = Vector3F.transformReverse(d, orthonormalBasis);
 		
 		final Vector3F n = intersection.getSurfaceNormalS();
-		final Vector3F nLocal = Vector3F.normalize(Vector3F.transformReverse(n, orthonormalBasis));
+		final Vector3F nLocal = Vector3F.transformReverse(n, orthonormalBasis);
 		
 		final float[] rProj = {
 			Floats.sqrt(dLocal.y * dLocal.y + dLocal.z * dLocal.z),

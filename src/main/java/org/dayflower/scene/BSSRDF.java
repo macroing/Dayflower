@@ -50,7 +50,7 @@ public abstract class BSSRDF {
 	public abstract BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2);
 	
 //	TODO: Add Javadocs!
-	public abstract Color3F evaluateS(final Intersection intersection, final Vector3F incoming);
+//	public abstract Color3F evaluateS(final Intersection intersection, final Vector3F incoming);
 	
 //	TODO: Add Javadocs!
 	public final Intersection getIntersection() {

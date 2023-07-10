@@ -55,9 +55,9 @@ import org.macroing.java.lang.Floats;
  * @author J&#246;rgen Lundgren
  */
 public final class Distribution1F {
+	private final float functionIntegral;
 	private final float[] cumulativeDistributionFunction;
 	private final float[] function;
-	private final float functionIntegral;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

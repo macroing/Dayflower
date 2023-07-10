@@ -37,7 +37,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
-import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.NRooksSampler;
 import org.dayflower.sampler.Sample1F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
@@ -138,7 +138,7 @@ public final class Scene implements Node {
 		this.primitives = new CopyOnWriteArrayList<>();
 		this.primitivesExternalToBVH = new CopyOnWriteArrayList<>();
 		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
-		this.sampler = new RandomSampler();
+		this.sampler = new NRooksSampler();
 		this.name = Objects.requireNonNull(name, "name == null");
 		this.primitiveInstanceID = -1;
 		this.updatedAt = 0L;
@@ -560,10 +560,6 @@ public final class Scene implements Node {
 					
 					final Intersection intersection2 = bSSRDFResult.getIntersection();
 					
-					throughput = Color3F.multiply(throughput, Color3F.divide(result2, probabilityDensityFunctionValue2));
-					
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF2, intersection2)));
-					
 					final Optional<BSDFResult> optionalBSDFResult2 = bSDF2.sampleDistributionFunction(BXDFType.ALL, new Point2F(u3.getComponent1(), u3.getComponent2()));
 					
 					if(!optionalBSDFResult2.isPresent()) {
@@ -579,6 +575,10 @@ public final class Scene implements Node {
 					if(result3.isBlack() || result3.hasInfinites() || result3.hasNaNs() || Floats.isZero(probabilityDensityFunctionValue3) || !Floats.isFinite(probabilityDensityFunctionValue3)) {
 						break;
 					}
+					
+					throughput = Color3F.multiply(throughput, Color3F.divide(result2, probabilityDensityFunctionValue2));
+					
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF2, intersection2)));
 					
 					final Vector3F incoming2 = bSDFResult2.getIncoming();
 					

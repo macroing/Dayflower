@@ -57,20 +57,20 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	@Override
-	public Color3F evaluateS(final Intersection intersection, final Vector3F incoming) {
-		final float f = DielectricFresnel.evaluate(Vector3F.negate(getIntersection().getRay().getDirection()).cosTheta(), 1.0F, getEta());
+//	@Override
+//	public final Color3F evaluateS(final Intersection intersection, final Vector3F incoming) {
+//		final float f = DielectricFresnel.evaluate(Vector3F.negate(getIntersection().getRay().getDirection()).cosTheta(), 1.0F, getEta());
 		
-		return Color3F.multiply(Color3F.multiply(evaluateSP(intersection), 1.0F - f), evaluateSW(incoming));
-	}
+//		return Color3F.multiply(Color3F.multiply(evaluateSP(intersection), 1.0F - f), evaluateSW(incoming));
+//	}
 	
 //	TODO: Add Javadocs!
-	public Color3F evaluateSP(final Intersection intersection) {
+	public final Color3F evaluateSP(final Intersection intersection) {
 		return evaluateSR(Point3F.distance(getIntersection().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionPoint()));
 	}
 	
 //	TODO: Add Javadocs!
-	public Color3F evaluateSW(final Vector3F incoming) {
+	public final Color3F evaluateSW(final Vector3F incoming) {
 		final float c = 1.0F - 2.0F * Utilities.computeFresnelMoment1(1.0F / getEta());
 		
 		return new Color3F((1.0F - DielectricFresnel.evaluate(incoming.cosTheta(), 1.0F, getEta())) / (c * Floats.PI));

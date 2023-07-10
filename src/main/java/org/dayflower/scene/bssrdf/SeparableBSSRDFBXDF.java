@@ -126,7 +126,7 @@ public final class SeparableBSSRDFBXDF extends BXDF {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-		Color3F f = this.separableBSSRDF.evaluateSW(Vector3F.transform(incoming, this.separableBSSRDF.getIntersection().getOrthonormalBasisS()));
+		Color3F f = this.separableBSSRDF.evaluateSW(incoming);
 		
 		if(this.separableBSSRDF.getTransportMode() == TransportMode.RADIANCE) {
 			f = Color3F.multiply(f, this.separableBSSRDF.getEta() * this.separableBSSRDF.getEta());

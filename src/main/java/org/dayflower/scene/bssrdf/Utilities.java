@@ -121,7 +121,7 @@ final class Utilities {
 		final float sigmaPS = sigmaS * (1.0F - g);
 		final float sigmaPT = sigmaA + sigmaPS;
 		final float albedo = sigmaPS / sigmaPT;
-		final float diffusionCoefficient = (2.0F * sigmaA + sigmaS) / (3.0F * sigmaPT * sigmaPT);
+		final float diffusionCoefficient = (2.0F * sigmaA + sigmaPS) / (3.0F * sigmaPT * sigmaPT);
 		final float sigmaTransport = Floats.sqrt(sigmaA / diffusionCoefficient);
 		final float fresnelMoment1 = computeFresnelMoment1(eta);
 		final float fresnelMoment2 = computeFresnelMoment2(eta);

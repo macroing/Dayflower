@@ -18,6 +18,8 @@
  */
 package org.dayflower.utility;
 
+import java.util.function.IntPredicate;
+
 /**
  * The class {@code Ints} contains methods for performing basic numeric operations.
  * <p>
@@ -70,6 +72,32 @@ public final class Ints {
 	 */
 	public static int abs(final int value) {
 		return Math.abs(value);
+	}
+	
+	/**
+	 * Returns the index of the value in the interval with a size of {@code size} that is satisfied by {@code predicate}.
+	 * 
+	 * @param size the size of the interval
+	 * @param predicate an {@code IntPredicate} that tests the value
+	 * @return the index of the value in the interval with a size of {@code size} that is satisfied by {@code predicate}
+	 */
+	public static int findInterval(final int size, final IntPredicate predicate) {
+		int first = 0;
+		int length = size;
+		
+		while(length > 0) {
+			final int half = length >> 1;
+			final int middle = first + half;
+			
+			if(predicate.test(middle)) {
+				first = middle + 1;
+				length -= half + 1;
+			} else {
+				length = half;
+			}
+		}
+		
+		return saturate(first - 1, 0, size - 2);
 	}
 	
 	/**

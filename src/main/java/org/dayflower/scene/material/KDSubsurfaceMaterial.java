@@ -49,8 +49,21 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 import org.macroing.art4j.color.Color3F;
+import org.macroing.java.lang.Floats;
+import org.macroing.java.lang.Strings;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code KDSubsurfaceMaterial} is an implementation of {@link Material} and is used for subsurface scattering.
+ * <p>
+ * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
+ * <p>
+ * This {@code Material} implementation is not supported on the GPU.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class KDSubsurfaceMaterial implements Material {
 	/**
 	 * The name of this {@code KDSubsurfaceMaterial} class.
@@ -80,27 +93,95 @@ public final class KDSubsurfaceMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code KDSubsurfaceMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new KDSubsurfaceMaterial(1.0F);
+	 * }
+	 * </pre>
+	 */
 	public KDSubsurfaceMaterial() {
 		this(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code KDSubsurfaceMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new KDSubsurfaceMaterial(scale, ConstantTexture.GRAY_0_50);
+	 * }
+	 * </pre>
+	 * 
+	 * @param scale the scale to use
+	 */
 	public KDSubsurfaceMaterial(final float scale) {
 		this(scale, ConstantTexture.GRAY_0_50);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code KDSubsurfaceMaterial} instance.
+	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new KDSubsurfaceMaterial(scale, textureKD, ConstantTexture.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param scale the scale to use
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
 	public KDSubsurfaceMaterial(final float scale, final Texture textureKD) {
 		this(scale, textureKD, ConstantTexture.WHITE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code KDSubsurfaceMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureKR} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new KDSubsurfaceMaterial(scale, textureKD, textureKR, ConstantTexture.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param scale the scale to use
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKR a {@code Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKR} are {@code null}
+	 */
 	public KDSubsurfaceMaterial(final float scale, final Texture textureKD, final Texture textureKR) {
 		this(scale, textureKD, textureKR, ConstantTexture.WHITE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code KDSubsurfaceMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKR} or {@code textureKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new KDSubsurfaceMaterial(scale, textureKD, textureKR, textureKT, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param scale the scale to use
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKR a {@code Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR} or {@code textureKT} are {@code null}
+	 */
 	public KDSubsurfaceMaterial(final float scale, final Texture textureKD, final Texture textureKR, final Texture textureKT) {
 		this(scale, textureKD, textureKR, textureKT, ConstantTexture.BLACK);
 	}
@@ -160,7 +241,15 @@ public final class KDSubsurfaceMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code KDSubsurfaceMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code KDSubsurfaceMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -168,7 +257,19 @@ public final class KDSubsurfaceMaterial implements Material {
 		return this.textureEmission.getColor(intersection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link ScatteringFunctions} at {@code intersection}.
+	 * <p>
+	 * Returns a {@code ScatteringFunctions} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code ScatteringFunctions} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return a {@code ScatteringFunctions} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public ScatteringFunctions computeScatteringFunctions(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -232,15 +333,154 @@ public final class KDSubsurfaceMaterial implements Material {
 		return new ScatteringFunctions(bSDF, bSSRDF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} with the name of this {@code KDSubsurfaceMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code KDSubsurfaceMaterial} instance
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code KDSubsurfaceMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code KDSubsurfaceMaterial} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new KDSubsurfaceMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", Strings.toNonScientificNotationJava(this.scale), this.textureKD, this.textureKR, this.textureKT, this.textureEmission, this.textureMFP, Strings.toNonScientificNotationJava(this.g), Strings.toNonScientificNotationJava(this.eta), this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness), this.modifier);
+	}
+	
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKT.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureMFP.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureRoughnessU.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureRoughnessV.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code KDSubsurfaceMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code KDSubsurfaceMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code KDSubsurfaceMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code KDSubsurfaceMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof KDSubsurfaceMaterial)) {
+			return false;
+		} else if(!Objects.equals(this.bSSRDFTable, KDSubsurfaceMaterial.class.cast(object).bSSRDFTable)) {
+			return false;
+		} else if(!Objects.equals(this.modifier, KDSubsurfaceMaterial.class.cast(object).modifier)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmission, KDSubsurfaceMaterial.class.cast(object).textureEmission)) {
+			return false;
+		} else if(!Objects.equals(this.textureKD, KDSubsurfaceMaterial.class.cast(object).textureKD)) {
+			return false;
+		} else if(!Objects.equals(this.textureKR, KDSubsurfaceMaterial.class.cast(object).textureKR)) {
+			return false;
+		} else if(!Objects.equals(this.textureKT, KDSubsurfaceMaterial.class.cast(object).textureKT)) {
+			return false;
+		} else if(!Objects.equals(this.textureMFP, KDSubsurfaceMaterial.class.cast(object).textureMFP)) {
+			return false;
+		} else if(!Objects.equals(this.textureRoughnessU, KDSubsurfaceMaterial.class.cast(object).textureRoughnessU)) {
+			return false;
+		} else if(!Objects.equals(this.textureRoughnessV, KDSubsurfaceMaterial.class.cast(object).textureRoughnessV)) {
+			return false;
+		} else if(this.isRemappingRoughness != KDSubsurfaceMaterial.class.cast(object).isRemappingRoughness) {
+			return false;
+		} else if(!Floats.equals(this.eta, KDSubsurfaceMaterial.class.cast(object).eta)) {
+			return false;
+		} else if(!Floats.equals(this.g, KDSubsurfaceMaterial.class.cast(object).g)) {
+			return false;
+		} else if(!Floats.equals(this.scale, KDSubsurfaceMaterial.class.cast(object).scale)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code KDSubsurfaceMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code KDSubsurfaceMaterial} instance
+	 */
 	@Override
 	public int getID() {
 		return ID;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code KDSubsurfaceMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code KDSubsurfaceMaterial} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.bSSRDFTable, this.modifier, this.textureEmission, this.textureKD, this.textureKR, this.textureKT, this.textureMFP, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness), Float.valueOf(this.eta), Float.valueOf(this.g), Float.valueOf(this.scale));
 	}
 }

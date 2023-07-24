@@ -1,3 +1,9 @@
+2023-07-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Interpolation API.
+	* ADD:		Add the method findInterval(int, IntPredicate) to the Ints class.
+	* CHANGE:	Refactor the Scene BSSRDF API.
+
 2023-07-14  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix a bug in the Scene BSSRDF API.

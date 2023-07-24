@@ -65,7 +65,7 @@ public final class TranslucentMaterial implements Material {
 	/**
 	 * The ID of this {@code TranslucentMaterial} class.
 	 */
-	public static final int ID = 15;
+	public static final int ID = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

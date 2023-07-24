@@ -20,6 +20,7 @@ package org.dayflower.scene.bssrdf;
 
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 
+import org.dayflower.interpolation.Interpolation;
 import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 
@@ -50,7 +51,7 @@ public final class BSSRDFTable {
 		final float[] sigmaS = {0.0F, 0.0F, 0.0F};
 		
 		for(int i = 0; i < 3; i++) {
-			final float rho = Utilities.invertCatmullRom(this.rhoSamples.length, this.rhoSamples, this.rhoEff, doGetComponentAt(rhoEff, i));
+			final float rho = Interpolation.invertCatmullRom(this.rhoSamples.length, this.rhoSamples, this.rhoEff, doGetComponentAt(rhoEff, i));
 			
 			sigmaS[i] = rho / doGetComponentAt(mfp, i);
 			sigmaA[i] = (1.0F - rho) / doGetComponentAt(mfp, i);
@@ -113,7 +114,7 @@ public final class BSSRDFTable {
 				this.profile[i * this.radiusSamples.length + j] = Floats.PI_MULTIPLIED_BY_2 * radius * (Utilities.computeBeamDiffusionSS(rho, 1.0F - rho, g, eta, radius) + Utilities.computeBeamDiffusionMS(rho, 1.0F - rho, g, eta, radius));
 			}
 			
-			this.rhoEff[i] = Utilities.integrateCatmullRom(this.radiusSamples.length, this.radiusSamples, this.profile, this.profileCDF, i * this.radiusSamples.length, i * this.radiusSamples.length);
+			this.rhoEff[i] = Interpolation.integrateCatmullRom(this.radiusSamples.length, this.radiusSamples, this.profile, this.profileCDF, i * this.radiusSamples.length, i * this.radiusSamples.length);
 		}
 	}
 	

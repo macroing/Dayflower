@@ -1408,6 +1408,30 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Performs the operation {@code CosDPhi(...)} of PBRT.
+	 * <p>
+	 * Returns the result of the operation.
+	 * <p>
+	 * If either {@code wa} or {@code wb} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param wa a {@code Vector3D} instance
+	 * @param wb a {@code Vector3D} instance
+	 * @return the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code wa} or {@code wb} are {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static double cosDPhi(final Vector3D wa, final Vector3D wb) {
+		final double waxy = wa.x * wa.x + wa.y * wa.y;
+		final double wbxy = wb.x * wb.x + wb.y * wb.y;
+		
+		if(waxy == 0.0D || wbxy == 0.0D) {
+			return 1.0D;
+		}
+		
+		return Doubles.saturate((wa.x * wb.x + wa.y * wb.y) / Doubles.sqrt(waxy * wbxy), -1.0D, 1.0D);
+	}
+	
+	/**
 	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>
 	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.

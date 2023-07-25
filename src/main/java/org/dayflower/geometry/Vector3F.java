@@ -1407,7 +1407,18 @@ public final class Vector3F implements Node {
 		return vLHS.z * vRHS.z > 0.0F;
 	}
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Performs the operation {@code CosDPhi(...)} of PBRT.
+	 * <p>
+	 * Returns the result of the operation.
+	 * <p>
+	 * If either {@code wa} or {@code wb} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param wa a {@code Vector3F} instance
+	 * @param wb a {@code Vector3F} instance
+	 * @return the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code wa} or {@code wb} are {@code null}
+	 */
 //	TODO: Add Unit Tests!
 	public static float cosDPhi(final Vector3F wa, final Vector3F wb) {
 		final float waxy = wa.x * wa.x + wa.y * wa.y;

@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material;
 
-import java.lang.reflect.Field;//TODO: Add Javadoc!
 import java.util.Objects;
 
 import org.dayflower.scene.BSDF;
@@ -30,9 +29,21 @@ import org.dayflower.scene.bxdf.FourierBXDF;
 import org.dayflower.scene.bxdf.FourierBXDFTable;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
-import org.macroing.art4j.color.Color3F;
 
-//TODO: Add Javadoc!
+import org.macroing.art4j.color.Color3F;
+import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
+import org.macroing.java.util.visitor.NodeTraversalException;
+
+/**
+ * A {@code FourierMaterial} is an implementation of {@link Material} that represents a Fourier material.
+ * <p>
+ * This class is immutable and thread-safe as long as the {@link Modifier} instance and the {@link Texture} instance are.
+ * <p>
+ * This {@code Material} implementation is not supported on the GPU.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class FourierMaterial implements Material {
 	/**
 	 * The name of this {@code FourierMaterial} class.
@@ -53,7 +64,19 @@ public final class FourierMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Constructs a new {@code FourierMaterial} instance.
+	 * <p>
+	 * If either {@code filename}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param filename the filename of a BSDF file to read
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code filename}, {@code textureEmission} or {@code modifier} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
 	public FourierMaterial(final String filename, final Texture textureEmission, final Modifier modifier) {
 		this.fourierBXDFTable = new FourierBXDFTable();
 		this.fourierBXDFTable.read(Objects.requireNonNull(filename, "filename == null"));
@@ -64,7 +87,15 @@ public final class FourierMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code FourierMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code FourierMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -72,7 +103,19 @@ public final class FourierMaterial implements Material {
 		return this.textureEmission.getColor(intersection);
 	}
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Computes the {@link ScatteringFunctions} at {@code intersection}.
+	 * <p>
+	 * Returns a {@code ScatteringFunctions} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code ScatteringFunctions} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return a {@code ScatteringFunctions} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public ScatteringFunctions computeScatteringFunctions(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -87,15 +130,112 @@ public final class FourierMaterial implements Material {
 		return new ScatteringFunctions();
 	}
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Returns a {@code String} with the name of this {@code FourierMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code FourierMaterial} instance
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 	
-//	TODO: Add Javadoc!
+	/**
+	 * Returns a {@code String} representation of this {@code FourierMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code FourierMaterial} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new FourierMaterial(\"%s\", %s, %s)", this.filename, this.textureEmission, this.modifier);
+	}
+	
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code FourierMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code FourierMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code FourierMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code FourierMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof FourierMaterial)) {
+			return false;
+		} else if(!Objects.equals(this.fourierBXDFTable, FourierMaterial.class.cast(object).fourierBXDFTable)) {
+			return false;
+		} else if(!Objects.equals(this.modifier, FourierMaterial.class.cast(object).modifier)) {
+			return false;
+		} else if(!Objects.equals(this.filename, FourierMaterial.class.cast(object).filename)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmission, FourierMaterial.class.cast(object).textureEmission)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code FourierMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code FourierMaterial} instance
+	 */
 	@Override
 	public int getID() {
 		return ID;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code FourierMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code FourierMaterial} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.fourierBXDFTable, this.modifier, this.filename, this.textureEmission);
 	}
 }

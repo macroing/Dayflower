@@ -175,7 +175,7 @@ The following table describes the different APIs and their current status in the
 | -------------------------------------- | ------- | --------- |
 | Dayflower                              | ???.?%  |  16.4%    |
 | Change API                             | 100.0%  | 100.0%    |
-| Geometry API                           | ???.?%  |  78.6%    |
+| Geometry API                           | 100.0%  |  78.6%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |

@@ -1407,6 +1407,19 @@ public final class Vector3F implements Node {
 		return vLHS.z * vRHS.z > 0.0F;
 	}
 	
+//	TODO: Add Javadoc!
+//	TODO: Add Unit Tests!
+	public static float cosDPhi(final Vector3F wa, final Vector3F wb) {
+		final float waxy = wa.x * wa.x + wa.y * wa.y;
+		final float wbxy = wb.x * wb.x + wb.y * wb.y;
+		
+		if(waxy == 0.0F || wbxy == 0.0F) {
+			return 1.0F;
+		}
+		
+		return Floats.saturate((wa.x * wb.x + wa.y * wb.y) / Floats.sqrt(waxy * wbxy), -1.0F, 1.0F);
+	}
+	
 	/**
 	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
 	 * <p>

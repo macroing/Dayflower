@@ -1,3 +1,8 @@
+2023-07-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the FourierBXDF and FourierBXDFTable classes to the Scene BXDF API.
+	* ADD:		Add the FourierMaterial class to the Scene Material API.
+
 2023-07-24  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Interpolation API.

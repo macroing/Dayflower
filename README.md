@@ -93,24 +93,26 @@ The tables below show the main features of the renderer.
 
 #### Supported Materials
 
-| Name                  | CPU | GPU |
-| --------------------- | --- | --- |
-| Bullseye Material     | Yes | Yes |
-| Checkerboard Material | Yes | Yes |
-| Clear Coat Material   | Yes | Yes |
-| Disney Material       | Yes | Yes |
-| Function Material     | Yes | No  |
-| Glass Material        | Yes | Yes |
-| Glossy Material       | Yes | Yes |
-| Hair Material         | Yes | No  |
-| Matte Material        | Yes | Yes |
-| Metal Material        | Yes | Yes |
-| Mirror Material       | Yes | Yes |
-| Plastic Material      | Yes | Yes |
-| Polka Dot Material    | Yes | Yes |
-| Substrate Material    | Yes | Yes |
-| Translucent Material  | Yes | Yes |
-| Uber Material         | Yes | Yes |
+| Name                   | CPU | GPU |
+| ---------------------- | --- | --- |
+| Bullseye Material      | Yes | Yes |
+| Checkerboard Material  | Yes | Yes |
+| Clear Coat Material    | Yes | Yes |
+| Disney Material        | Yes | Yes |
+| Fourier Material       | Yes | No  |
+| Function Material      | Yes | No  |
+| Glass Material         | Yes | Yes |
+| Glossy Material        | Yes | Yes |
+| Hair Material          | Yes | No  |
+| KD Subsurface Material | Yes | No  |
+| Matte Material         | Yes | Yes |
+| Metal Material         | Yes | Yes |
+| Mirror Material        | Yes | Yes |
+| Plastic Material       | Yes | Yes |
+| Polka Dot Material     | Yes | Yes |
+| Substrate Material     | Yes | Yes |
+| Translucent Material   | Yes | Yes |
+| Uber Material          | Yes | Yes |
 
 #### Supported Modifiers
 
@@ -173,12 +175,13 @@ The following table describes the different APIs and their current status in the
 | -------------------------------------- | ------- | --------- |
 | Dayflower                              | ???.?%  |  16.4%    |
 | Change API                             | 100.0%  | 100.0%    |
-| Geometry API                           | 100.0%  |  78.6%    |
+| Geometry API                           | ???.?%  |  78.6%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
 | Geometry Shape API                     | 100.0%  |  17.6%    |
 | Image API                              | 100.0%  |   0.0%    |
+| Interpolation API                      | ???.?%  |   0.0%    |
 | JavaFX Material API                    | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
 | JavaFX Shape API                       | 100.0%  |   0.0%    |
@@ -191,7 +194,7 @@ The following table describes the different APIs and their current status in the
 | Sampler API                            | 100.0%  |   0.0%    |
 | Scene API                              | ???.?%  |   0.0%    |
 | Scene BSSRDF API                       | ???.?%  |   0.0%    |
-| Scene BXDF API                         | 100.0%  |   0.0%    |
+| Scene BXDF API                         | ???.?%  |   0.0%    |
 | Scene Compiler API                     | 100.0%  |   0.0%    |
 | Scene Fresnel API                      | 100.0%  |   0.0%    |
 | Scene Light API                        | 100.0%  |   0.0%    |

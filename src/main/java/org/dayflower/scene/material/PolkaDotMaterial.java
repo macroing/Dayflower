@@ -54,7 +54,7 @@ public final class PolkaDotMaterial implements Material {
 	/**
 	 * The ID of this {@code PolkaDotMaterial} class.
 	 */
-	public static final int ID = 14;
+	public static final int ID = 15;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

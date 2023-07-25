@@ -48,7 +48,7 @@ public final class FunctionMaterial implements Material {
 	/**
 	 * The ID of this {@code FunctionMaterial} class.
 	 */
-	public static final int ID = 5;
+	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

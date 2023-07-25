@@ -73,7 +73,7 @@ public final class KDSubsurfaceMaterial implements Material {
 	/**
 	 * The ID of this {@code KDSubsurfaceMaterial} class.
 	 */
-	public static final int ID = 9;
+	public static final int ID = 10;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

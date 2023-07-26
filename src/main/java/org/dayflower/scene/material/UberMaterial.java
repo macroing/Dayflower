@@ -65,7 +65,7 @@ public final class UberMaterial implements Material {
 	/**
 	 * The ID of this {@code UberMaterial} class.
 	 */
-	public static final int ID = 18;
+	public static final int ID = 19;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

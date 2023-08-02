@@ -503,6 +503,112 @@ public final class Triangle3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point3F p0 = new Point3F(this.a.position);
+		final Point3F p1 = new Point3F(this.b.position);
+		final Point3F p2 = new Point3F(this.c.position);
+		
+		Point3F p0t = Point3F.subtract(p0, new Vector3F(ray.getOrigin()));
+		Point3F p1t = Point3F.subtract(p1, new Vector3F(ray.getOrigin()));
+		Point3F p2t = Point3F.subtract(p2, new Vector3F(ray.getOrigin()));
+		
+		int kz = Vector3F.absolute(ray.getDirection()).getMaxDimension();
+		int kx = kz + 1;
+		
+		if(kx == 3) {
+			kx = 0;
+		}
+		
+		int ky = kx + 1;
+		
+		if(ky == 3) {
+			ky = 0;
+		}
+		
+		final Vector3F d = Vector3F.permute(ray.getDirection(), kx, ky, kz);
+		
+		p0t = Point3F.permute(p0t, kx, ky, kz);
+		p1t = Point3F.permute(p1t, kx, ky, kz);
+		p2t = Point3F.permute(p2t, kx, ky, kz);
+		
+		final float sx = -d.x / d.z;
+		final float sy = -d.y / d.z;
+		final float sz = 1.0F / d.z;
+		
+		p0t = new Point3F(p0t.x + sx * p0t.z, p0t.y + sy * p0t.z, p0t.z);
+		p1t = new Point3F(p1t.x + sx * p1t.z, p1t.y + sy * p1t.z, p1t.z);
+		p2t = new Point3F(p2t.x + sx * p2t.z, p2t.y + sy * p2t.z, p2t.z);
+		
+		float e0 = p1t.x * p2t.y - p1t.y * p2t.x;
+		float e1 = p2t.x * p0t.y - p2t.y * p0t.x;
+		float e2 = p0t.x * p1t.y - p0t.y * p1t.x;
+		
+		if(e0 == 0.0F || e1 == 0.0F || e2 == 0.0F) {
+			final double p2txp1ty = (double)(p2t.x) * (double)(p1t.y);
+			final double p2typ1tx = (double)(p2t.y) * (double)(p1t.x);
+			
+			e0 = (float)(p2typ1tx - p2txp1ty);
+			
+			final double p0txp2ty = (double)(p0t.x) * (double)(p2t.y);
+			final double p0typ2tx = (double)(p0t.y) * (double)(p2t.x);
+			
+			e1 = (float)(p0typ2tx - p0txp2ty);
+			
+			final double p1txp0ty = (double)(p1t.x) * (double)(p0t.y);
+			final double p1typ0tx = (double)(p1t.y) * (double)(p0t.x);
+			
+			e2 = (float)(p1typ0tx - p1txp0ty);
+		}
+		
+		if((e0 < 0.0F || e1 < 0.0F || e2 < 0.0F) && (e0 > 0.0F || e1 > 0.0F || e2 > 0.0F)) {
+			return Float.NaN;
+		}
+		
+		final float det = e0 + e1 + e2;
+		
+		if(det == 0.0F) {
+			return Float.NaN;
+		}
+		
+		p0t = new Point3F(p0t.x, p0t.y, p0t.z * sz);
+		p1t = new Point3F(p1t.x, p1t.y, p1t.z * sz);
+		p2t = new Point3F(p2t.x, p2t.y, p2t.z * sz);
+		
+		float tScaled = e0 * p0t.z + e1 * p1t.z + e2 * p2t.z;
+		
+		if(det < 0.0F && (tScaled >= tMinimum || tScaled < tMaximum * det)) {
+			return Float.NaN;
+		} else if(det > 0.0F && (tScaled <= tMinimum || tScaled > tMaximum * det)) {
+			return Float.NaN;
+		}
+		
+		final float invDet = 1.0F / det;
+		
+//		final float b0 = e0 * invDet;
+//		final float b1 = e1 * invDet;
+//		final float b2 = e2 * invDet;
+		
+		final float t = tScaled * invDet;
+		
+		final float maxZt = Vector3F.absolute(new Vector3F(p0t.z, p1t.z, p2t.z)).getMaxComponentValue();
+		final float maxXt = Vector3F.absolute(new Vector3F(p0t.x, p1t.x, p2t.x)).getMaxComponentValue();
+		final float maxYt = Vector3F.absolute(new Vector3F(p0t.y, p1t.y, p2t.y)).getMaxComponentValue();
+		
+		final float deltaZ = Floats.gamma(3) * maxZt;
+		final float deltaX = Floats.gamma(5) * (maxXt + maxZt);
+		final float deltaY = Floats.gamma(5) * (maxYt + maxZt);
+		final float deltaE = 2.0F * (Floats.gamma(2) * maxXt * maxYt + deltaY * maxXt + deltaX * maxYt);
+		
+		final float maxE = Vector3F.absolute(new Vector3F(e0, e1, e2)).getMaxComponentValue();
+		
+		final float deltaT = 3.0F * (Floats.gamma(3) * maxE * maxZt + deltaE * maxZt + deltaZ * maxE) * Floats.abs(invDet);
+		
+		if(t <= deltaT) {
+			return Float.NaN;
+		}
+		
+		return t;
+		
+		/*
 		final Point4F a = this.a.getPosition();
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
@@ -546,6 +652,7 @@ public final class Triangle3F implements Shape3F {
 		}
 		
 		return t;
+		*/
 	}
 	
 	/**

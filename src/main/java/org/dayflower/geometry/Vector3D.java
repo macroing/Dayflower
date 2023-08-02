@@ -272,6 +272,16 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns the maximum component value.
+	 * 
+	 * @return the maximum component value
+	 */
+//	TODO: Add Unit Tests!
+	public double getMaxComponentValue() {
+		return Doubles.max(Doubles.max(this.x, this.y), this.z);
+	}
+	
+	/**
 	 * Returns the length of this {@code Vector3D} instance.
 	 * 
 	 * @return the length of this {@code Vector3D} instance
@@ -385,6 +395,16 @@ public final class Vector3D implements Node {
 	 */
 	public double[] toArray() {
 		return new double[] {this.x, this.y, this.z};
+	}
+	
+	/**
+	 * Returns the max dimension.
+	 * 
+	 * @return the max dimension
+	 */
+//	TODO: Add Unit Tests!
+	public int getMaxDimension() {
+		return this.x > this.y ? this.x > this.z ? 0 : 2 : this.y > this.z ? 1 : 2;
 	}
 	
 	/**
@@ -988,6 +1008,26 @@ public final class Vector3D implements Node {
 		}
 		
 		return divide(v, length);
+	}
+	
+	/**
+	 * Returns a permuted {@code Vector3D} instance.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code x}, {@code y} or {@code z} are less than {@code 0} or greater than or equal to {@code 3}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param v a {@code Vector3D} instance
+	 * @param x the index of the X-axis
+	 * @param y the index of the Y-axis
+	 * @param z the index of the Z-axis
+	 * @return a permuted {@code Vector3D} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code x}, {@code y} or {@code z} are less than {@code 0} or greater than or equal to {@code 3}
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Vector3D permute(final Vector3D v, final int x, final int y, final int z) {
+		return new Vector3D(v.getComponentAt(x), v.getComponentAt(y), v.getComponentAt(z));
 	}
 	
 	/**

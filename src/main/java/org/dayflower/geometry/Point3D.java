@@ -22,6 +22,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -558,6 +559,26 @@ public final class Point3D implements Node {
 		final double z = offset.z > 0.0D ? Doubles.nextUp(pointOffset.z) : offset.z < 0.0D ? Doubles.nextDown(pointOffset.z) : pointOffset.z;
 		
 		return new Point3D(x, y, z);
+	}
+	
+	/**
+	 * Returns a permuted {@code Point3D} instance.
+	 * <p>
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code x}, {@code y} or {@code z} are less than {@code 0} or greater than or equal to {@code 3}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param p a {@code Point3D} instance
+	 * @param x the index of the X-axis
+	 * @param y the index of the Y-axis
+	 * @param z the index of the Z-axis
+	 * @return a permuted {@code Point3D} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code x}, {@code y} or {@code z} are less than {@code 0} or greater than or equal to {@code 3}
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static Point3D permute(final Point3D p, final int x, final int y, final int z) {
+		return new Point3D(p.getComponent(x), p.getComponent(y), p.getComponent(z));
 	}
 	
 	/**

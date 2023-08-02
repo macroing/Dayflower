@@ -196,7 +196,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 				break;
 			}
 			
-			final Optional<Intersection> optionalIntersection = scene.intersection(ray, 0.0F, Floats.MAX_VALUE);
+			final Optional<Intersection> optionalIntersection = scene.intersection(ray, 0.0001F, 1.0F - 0.0001F);
 			
 			if(optionalIntersection.isEmpty()) {
 				break;

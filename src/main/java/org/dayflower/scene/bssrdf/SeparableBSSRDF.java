@@ -32,7 +32,6 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BSSRDFResult;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.fresnel.DielectricFresnel;
@@ -48,16 +47,14 @@ import org.macroing.java.lang.Ints;
  * @author J&#246;rgen Lundgren
  */
 public abstract class SeparableBSSRDF extends BSSRDF {
-	private final Material material;
 	private final TransportMode transportMode;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected SeparableBSSRDF(final Intersection intersection, final float eta, final Material material, final TransportMode transportMode) {
+	protected SeparableBSSRDF(final Intersection intersection, final float eta, final TransportMode transportMode) {
 		super(intersection, eta);
 		
-		this.material = Objects.requireNonNull(material, "material == null");
 		this.transportMode = Objects.requireNonNull(transportMode, "transportMode == null");
 	}
 	
@@ -97,7 +94,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	
 //	TODO: Add Javadocs!
 	public final Color3F evaluateSP(final Intersection intersection) {
-		return evaluateSR(Point3F.distance(getIntersection().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionPoint()));
+		return evaluateSR(Point3F.distance(intersection.getSurfaceIntersectionPoint(), getIntersection().getSurfaceIntersectionPoint()));
 	}
 	
 //	TODO: Add Javadocs!
@@ -109,11 +106,6 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	
 //	TODO: Add Javadocs!
 	public abstract Color3F evaluateSR(final float distance);
-	
-//	TODO: Add Javadocs!
-	public final Material getMaterial() {
-		return this.material;
-	}
 	
 //	TODO: Add Javadocs!
 	public SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2) {
@@ -206,7 +198,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 			
 			intersectionChain.setIntersection(intersection);
 			
-			if(intersection.getPrimitive().getMaterial() == getMaterial()) {
+			if(intersection.getPrimitive() == getIntersection().getPrimitive()) {
 				final IntersectionChain newIntersectionChain = new IntersectionChain();
 				
 				intersectionChain.setIntersectionChain(newIntersectionChain);

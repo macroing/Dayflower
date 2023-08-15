@@ -2109,9 +2109,12 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float originY = surfaceIntersectionPointY;
 		final float originZ = surfaceIntersectionPointZ;
 		
+		final float radius = 1.0F;
+		final float radiusSquared = radius * radius;
+		
 		final float distanceSquared = point3FDistanceSquared(centerX, centerY, centerZ, originX, originY, originZ);
 		
-		if(distanceSquared <= 1.0F) {
+		if(distanceSquared <= radiusSquared) {
 			shape3FSphere3FSample(u, v);
 			
 			final float pointX = point3FGetX();
@@ -2172,9 +2175,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float wY = -orthonormalBasis33FGetWY();
 		final float wZ = -orthonormalBasis33FGetWZ();
 		
-		final float sinThetaMax = distanceReciprocal;
+		final float sinThetaMax = radius * distanceReciprocal;
 		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
-		final float sinThetaMaxReciprocal = distance;
+		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
 		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
 		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * u) : (cosThetaMax - 1.0F) * u + 1.0F;
 		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * u : 1.0F - cosTheta * cosTheta;
@@ -2188,9 +2191,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float sphericalDirectionY = vector3FGetY();
 		final float sphericalDirectionZ = vector3FGetZ();
 		
-		final float samplePointX = centerX + sphericalDirectionX;
-		final float samplePointY = centerY + sphericalDirectionY;
-		final float samplePointZ = centerZ + sphericalDirectionZ;
+		final float samplePointX = centerX + sphericalDirectionX * radius;
+		final float samplePointY = centerY + sphericalDirectionY * radius;
+		final float samplePointZ = centerZ + sphericalDirectionZ * radius;
 		
 		final float sphericalDirectionLengthReciprocal = vector3FLengthReciprocal(sphericalDirectionX, sphericalDirectionY, sphericalDirectionZ);
 		

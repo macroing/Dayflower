@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import org.dayflower.interpolation.Interpolation;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 
 import org.macroing.art4j.color.Color3F;
@@ -43,8 +42,8 @@ public final class TabulatedBSSRDF extends SeparableBSSRDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public TabulatedBSSRDF(final Intersection intersection, final float eta, final Material material, final TransportMode transportMode, final Color3F sigmaA, final Color3F sigmaS, final BSSRDFTable bSSRDFTable) {
-		super(intersection, eta, material, transportMode);
+	public TabulatedBSSRDF(final Intersection intersection, final float eta, final TransportMode transportMode, final Color3F sigmaA, final Color3F sigmaS, final BSSRDFTable bSSRDFTable) {
+		super(intersection, eta, transportMode);
 		
 		this.bSSRDFTable = Objects.requireNonNull(bSSRDFTable, "bSSRDFTable == null");
 		this.sigmaT = Color3F.add(sigmaA, sigmaS);

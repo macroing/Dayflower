@@ -193,7 +193,7 @@ public final class SubsurfaceMaterial implements Material {
 		
 		final BSDF bSDF = new BSDF(intersection, bXDFs, false, this.eta);
 		
-		final BSSRDF bSSRDF = new TabulatedBSSRDF(intersection, this.eta, this, transportMode, sigmaA, sigmaS, this.bSSRDFTable);
+		final BSSRDF bSSRDF = new TabulatedBSSRDF(intersection, this.eta, transportMode, sigmaA, sigmaS, this.bSSRDFTable);
 		
 		return new ScatteringFunctions(bSDF, bSSRDF);
 	}

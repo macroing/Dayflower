@@ -1385,14 +1385,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final float normalY = intersectionLHSGetOrthonormalBasisSWY();
 		final float normalZ = intersectionLHSGetOrthonormalBasisSWZ();
 		
-//		Compute the dot product between the surface normal and the current ray direction:
-		final float normalDotRayDirection = vector3FDotProduct(normalX, normalY, normalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
-		
-//		Compute the correctly oriented surface normal:
-		final float normalCorrectlyOrientedX = normalDotRayDirection > 0.0F ? -normalX : normalX;
-		final float normalCorrectlyOrientedY = normalDotRayDirection > 0.0F ? -normalY : normalY;
-		final float normalCorrectlyOrientedZ = normalDotRayDirection > 0.0F ? -normalZ : normalZ;
-		
 //		Retrieve the surface intersection point from the current surface intersection:
 		final float surfaceIntersectionPointX = intersectionLHSGetSurfaceIntersectionPointX();
 		final float surfaceIntersectionPointY = intersectionLHSGetSurfaceIntersectionPointY();
@@ -1433,7 +1425,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 				
 				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
@@ -1497,7 +1489,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
 				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 				
 				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
 				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
@@ -1562,7 +1554,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float resultG = materialBSDFResultGetResultG();
 			final float resultB = materialBSDFResultGetResultB();
 			
-			final float incomingDotNormalAbs = abs(vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
+			final float incomingDotNormalAbs = abs(vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ));
 			
 			final float scatteringResultR = resultR * incomingDotNormalAbs;
 			final float scatteringResultG = resultG * incomingDotNormalAbs;

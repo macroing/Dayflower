@@ -97,7 +97,11 @@ public final class Sphere3FReader implements Shape3FReader {
 		
 		ParameterArguments.requireExact(id, Sphere3F.ID, "id");
 		
-		return new Sphere3F();
+		try {
+			return new Sphere3F(dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat(), dataInput.readFloat());
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 	
 	/**

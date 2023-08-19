@@ -35,8 +35,9 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
-
+import org.dayflower.utility.EFloat;
 import org.macroing.java.lang.Floats;
 
 /**
@@ -64,12 +65,38 @@ public final class Sphere3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final float phiMax;
+	private final float radius;
+	private final float thetaMax;
+	private final float thetaMin;
+	private final float zMax;
+	private final float zMin;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code Sphere3F} instance.
 	 */
 //	TODO: Add Unit Tests!
 	public Sphere3F() {
-		
+		this(1.0F, -1.0F, 1.0F, 360.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code Sphere3F} instance.
+	 * 
+	 * @param radius the radius to use
+	 * @param zMin the minimum Z value
+	 * @param zMax the maximum Z value
+	 * @param phiMax the maximum phi value
+	 */
+	public Sphere3F(final float radius, final float zMin, final float zMax, final float phiMax) {
+		this.radius = radius;
+		this.zMin = Floats.saturate(Floats.min(zMin, zMax), -radius, radius);
+		this.zMax = Floats.saturate(Floats.max(zMin, zMax), -radius, radius);
+		this.thetaMin = Floats.acos(Floats.saturate(Floats.min(zMin, zMax) / radius, -1.0F, 1.0F));
+		this.thetaMax = Floats.acos(Floats.saturate(Floats.max(zMin, zMax) / radius, -1.0F, 1.0F));
+		this.phiMax = Floats.toRadians(Floats.saturate(phiMax, 0.0F, 360.0F));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +109,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new BoundingSphere3F(1.0F, new Point3F());
+		return new AxisAlignedBoundingBox3F(new Point3F(-this.radius, -this.radius, this.zMin), new Point3F(this.radius, this.radius, this.zMax));
 	}
 	
 	/**
@@ -214,13 +241,137 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final float t = intersectionT(ray, tMinimum, tMaximum);
+		final EFloat ox = new EFloat(ray.getOrigin().x);
+		final EFloat oy = new EFloat(ray.getOrigin().y);
+		final EFloat oz = new EFloat(ray.getOrigin().z);
+		final EFloat dx = new EFloat(ray.getDirection().x);
+		final EFloat dy = new EFloat(ray.getDirection().y);
+		final EFloat dz = new EFloat(ray.getDirection().z);
 		
-		if(Floats.isNaN(t)) {
-			return SurfaceIntersection3F.EMPTY;
+		final EFloat a = EFloat.add(EFloat.add(EFloat.multiply(dx, dx), EFloat.multiply(dy, dy)), EFloat.multiply(dz, dz));
+		final EFloat b = EFloat.multiply(new EFloat(2.0F), EFloat.add(EFloat.add(EFloat.multiply(dx, ox), EFloat.multiply(dy, oy)), EFloat.multiply(dz, oz)));
+		final EFloat c = EFloat.subtract(EFloat.add(EFloat.add(EFloat.multiply(ox, ox), EFloat.multiply(oy, oy)), EFloat.multiply(oz, oz)), EFloat.multiply(new EFloat(this.radius), new EFloat(this.radius)));
+		
+		final EFloat[] t0 = new EFloat[1];
+		final EFloat[] t1 = new EFloat[1];
+		
+		if(!EFloat.quadratic(a, b, c, t0, t1)) {
+			return Optional.empty();
 		}
 		
-		return Optional.of(doCreateSurfaceIntersection(ray, t));
+		if(t0[0].getUpperBound() > tMaximum || t1[0].getLowerBound() <= tMinimum) {
+			return Optional.empty();
+		}
+		
+		EFloat tShapeHit = t0[0];
+		
+		if(tShapeHit.getLowerBound() <= 0.0F) {
+			tShapeHit = t1[0];
+			
+			if(tShapeHit.getUpperBound() > tMaximum) {
+				return Optional.empty();
+			}
+		}
+		
+		Point3F pHit = ray.getPointAt(tShapeHit.getValue());
+		
+		float s = this.radius / Point3F.distance(pHit, new Point3F());
+		
+		pHit = new Point3F(pHit.x * s, pHit.y * s, pHit.z * s);
+		
+		if(pHit.x == 0.0F && pHit.y == 0.0F) {
+			pHit = new Point3F(1.0e-5F * this.radius, pHit.y, pHit.z);
+		}
+		
+		float phi = Floats.atan2(pHit.y, pHit.x);
+		
+		if(phi < 0.0F) {
+			phi += 2.0F * Floats.PI;
+		}
+		
+		if((this.zMin > -this.radius && pHit.z < this.zMin) || (this.zMax < this.radius && pHit.z > this.zMax) || phi > this.phiMax) {
+			if(tShapeHit == t1[0]) {
+				return Optional.empty();
+			}
+			
+			if(t1[0].getUpperBound() > tMaximum) {
+				return Optional.empty();
+			}
+			
+			tShapeHit = t1[0];
+			
+			pHit = ray.getPointAt(tShapeHit.getValue());
+			
+			s = this.radius / Point3F.distance(pHit, new Point3F());
+			
+			pHit = new Point3F(pHit.x * s, pHit.y * s, pHit.z * s);
+			
+			if(pHit.x == 0.0F && pHit.y == 0.0F) {
+				pHit = new Point3F(1.0e-5F * this.radius, pHit.y, pHit.z);
+			}
+			
+			phi = Floats.atan2(pHit.y, pHit.x);
+			
+			if(phi < 0.0F) {
+				phi += 2.0F * Floats.PI;
+			}
+			
+			if((this.zMin > -this.radius && pHit.z < this.zMin) || (this.zMax < this.radius && pHit.z > this.zMax) || phi > this.phiMax) {
+				return Optional.empty();
+			}
+		}
+		
+		final float u = phi / this.phiMax;
+		final float theta = Floats.acos(Floats.saturate(pHit.z / this.radius, -1.0F, 1.0F));
+		final float v = (theta - this.thetaMin) / (this.thetaMax - this.thetaMin);
+		
+		final float zRadius = Floats.sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
+		final float zRadiusInv = 1.0F / zRadius;
+		final float cosPhi = pHit.x * zRadiusInv;
+		final float sinPhi = pHit.y * zRadiusInv;
+		
+		final Vector3F dpdu = new Vector3F(-this.phiMax * pHit.y, this.phiMax * pHit.x, 0.0F);
+		final Vector3F dpdv = Vector3F.multiply(new Vector3F(pHit.z * cosPhi, pHit.z * sinPhi, -this.radius * Floats.sin(theta)), this.thetaMax - this.thetaMin);
+		
+//		final Vector3F d2Pduu = Vector3F.multiply(new Vector3F(pHit.x, pHit.y, 0.0F), -this.phiMax * this.phiMax);
+//		final Vector3F d2Pduv = Vector3F.multiply(new Vector3F(-sinPhi, cosPhi, 0.0F), (this.thetaMax - this.thetaMin) * pHit.z * this.phiMax);
+//		final Vector3F d2Pdvv = Vector3F.multiply(new Vector3F(pHit.x, pHit.y, pHit.z), -(this.thetaMax - this.thetaMin) * (this.thetaMax - this.thetaMin));
+		
+//		final float e = Vector3F.dotProduct(dpdu, dpdu);
+//		final float f = Vector3F.dotProduct(dpdu, dpdv);
+//		final float g = Vector3F.dotProduct(dpdv, dpdv);
+		
+		final Vector3F n = Vector3F.normalize(Vector3F.crossProduct(dpdu, dpdv));
+		
+//		final float h = Vector3F.dotProduct(n, d2Pduu);
+//		final float i = Vector3F.dotProduct(n, d2Pduv);
+//		final float j = Vector3F.dotProduct(n, d2Pdvv);
+		
+//		final float invEGFF = 1.0F / (e * g - f * f);
+		
+//		final float k = i * f - h * g;
+//		final float l = h * f - i * e;
+//		final float m = j * f - i * g;
+//		final float o = i * f - j * e;
+		
+//		final float dnduX = k * invEGFF * dpdu.x + l * invEGFF * dpdv.x;
+//		final float dnduY = k * invEGFF * dpdu.y + l * invEGFF * dpdv.y;
+//		final float dnduZ = k * invEGFF * dpdu.z + l * invEGFF * dpdv.z;
+		
+//		final float dndvX = m * invEGFF * dpdu.x + o * invEGFF * dpdv.x;
+//		final float dndvY = m * invEGFF * dpdu.y + o * invEGFF * dpdv.y;
+//		final float dndvZ = m * invEGFF * dpdu.z + o * invEGFF * dpdv.z;
+		
+//		final Vector3F pError = Vector3F.multiply(Vector3F.absolute(new Vector3F(pHit)), Floats.gamma(5));
+		
+		final Point3F surfaceIntersectionPoint = pHit;
+		
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(n, dpdv, dpdu);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = new Point2F(u, v);
+		
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, tShapeHit.getValue()));
 	}
 	
 	/**
@@ -274,6 +425,18 @@ public final class Sphere3F implements Shape3F {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Sphere3F)) {
+			return false;
+		} else if(!Floats.equals(this.phiMax, Sphere3F.class.cast(object).phiMax)) {
+			return false;
+		} else if(!Floats.equals(this.radius, Sphere3F.class.cast(object).radius)) {
+			return false;
+		} else if(!Floats.equals(this.thetaMax, Sphere3F.class.cast(object).thetaMax)) {
+			return false;
+		} else if(!Floats.equals(this.thetaMin, Sphere3F.class.cast(object).thetaMin)) {
+			return false;
+		} else if(!Floats.equals(this.zMax, Sphere3F.class.cast(object).zMax)) {
+			return false;
+		} else if(!Floats.equals(this.zMin, Sphere3F.class.cast(object).zMin)) {
 			return false;
 		} else {
 			return true;
@@ -342,28 +505,87 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F centerToOrigin = Vector3F.direction(new Point3F(), ray.getOrigin());
+		final EFloat ox = new EFloat(ray.getOrigin().x);
+		final EFloat oy = new EFloat(ray.getOrigin().y);
+		final EFloat oz = new EFloat(ray.getOrigin().z);
+		final EFloat dx = new EFloat(ray.getDirection().x);
+		final EFloat dy = new EFloat(ray.getDirection().y);
+		final EFloat dz = new EFloat(ray.getDirection().z);
 		
-		final float a = direction.lengthSquared();
-		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-		final float c = centerToOrigin.lengthSquared() - 1.0F;
+		final EFloat a = EFloat.add(EFloat.add(EFloat.multiply(dx, dx), EFloat.multiply(dy, dy)), EFloat.multiply(dz, dz));
+		final EFloat b = EFloat.multiply(new EFloat(2.0F), EFloat.add(EFloat.add(EFloat.multiply(dx, ox), EFloat.multiply(dy, oy)), EFloat.multiply(dz, oz)));
+		final EFloat c = EFloat.subtract(EFloat.add(EFloat.add(EFloat.multiply(ox, ox), EFloat.multiply(oy, oy)), EFloat.multiply(oz, oz)), EFloat.multiply(new EFloat(this.radius), new EFloat(this.radius)));
 		
-		final float[] ts = Floats.solveQuadraticSystem(a, b, c);
+		final EFloat[] t0 = new EFloat[1];
+		final EFloat[] t1 = new EFloat[1];
 		
-		for(int i = 0; i < ts.length; i++) {
-			final float t = ts[i];
+		if(!EFloat.quadratic(a, b, c, t0, t1)) {
+			return Float.NaN;
+		}
+		
+		if(t0[0].getUpperBound() > tMaximum || t1[0].getLowerBound() <= tMinimum) {
+			return Float.NaN;
+		}
+		
+		EFloat tShapeHit = t0[0];
+		
+		if(tShapeHit.getLowerBound() <= 0.0F) {
+			tShapeHit = t1[0];
 			
-			if(Floats.isNaN(t)) {
+			if(tShapeHit.getUpperBound() > tMaximum) {
 				return Float.NaN;
-			}
-			
-			if(t > tMinimum && t < tMaximum) {
-				return t;
 			}
 		}
 		
-		return Float.NaN;
+		Point3F pHit = ray.getPointAt(tShapeHit.getValue());
+		
+		float s = this.radius / Point3F.distance(pHit, new Point3F());
+		
+		pHit = new Point3F(pHit.x * s, pHit.y * s, pHit.z * s);
+		
+		if(pHit.x == 0.0F && pHit.y == 0.0F) {
+			pHit = new Point3F(1.0e-5F * this.radius, pHit.y, pHit.z);
+		}
+		
+		float phi = Floats.atan2(pHit.y, pHit.x);
+		
+		if(phi < 0.0F) {
+			phi += 2.0F * Floats.PI;
+		}
+		
+		if((this.zMin > -this.radius && pHit.z < this.zMin) || (this.zMax < this.radius && pHit.z > this.zMax) || phi > this.phiMax) {
+			if(tShapeHit == t1[0]) {
+				return Float.NaN;
+			}
+			
+			if(t1[0].getUpperBound() > tMaximum) {
+				return Float.NaN;
+			}
+			
+			tShapeHit = t1[0];
+			
+			pHit = ray.getPointAt(tShapeHit.getValue());
+			
+			s = this.radius / Point3F.distance(pHit, new Point3F());
+			
+			pHit = new Point3F(pHit.x * s, pHit.y * s, pHit.z * s);
+			
+			if(pHit.x == 0.0F && pHit.y == 0.0F) {
+				pHit = new Point3F(1.0e-5F * this.radius, pHit.y, pHit.z);
+			}
+			
+			phi = Floats.atan2(pHit.y, pHit.x);
+			
+			if(phi < 0.0F) {
+				phi += 2.0F * Floats.PI;
+			}
+			
+			if((this.zMin > -this.radius && pHit.z < this.zMin) || (this.zMax < this.radius && pHit.z > this.zMax) || phi > this.phiMax) {
+				return Float.NaN;
+			}
+		}
+		
+		return tShapeHit.getValue();
 	}
 	
 	/**
@@ -385,7 +607,7 @@ public final class Sphere3F implements Shape3F {
 //	TODO: Add Unit Tests!
 	@Override
 	public int hashCode() {
-		return Objects.hash();
+		return Objects.hash(Float.valueOf(this.phiMax), Float.valueOf(this.radius), Float.valueOf(this.thetaMax), Float.valueOf(this.thetaMin), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
 	}
 	
 	/**
@@ -404,34 +626,12 @@ public final class Sphere3F implements Shape3F {
 	public void write(final DataOutput dataOutput) {
 		try {
 			dataOutput.writeInt(ID);
+			dataOutput.writeFloat(this.radius);
+			dataOutput.writeFloat(this.zMin);
+			dataOutput.writeFloat(this.zMax);
+			dataOutput.writeFloat(Floats.toDegrees(this.phiMax));
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float t) {
-		final Point3F surfaceIntersectionPoint = doCreateSurfaceIntersectionPoint(ray, t);
-		
-		final OrthonormalBasis33F orthonormalBasisG = doCreateOrthonormalBasisG(surfaceIntersectionPoint);
-		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
-		
-		final Point2F textureCoordinates = Point2F.sphericalCoordinates(Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint));
-		
-		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, t);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static OrthonormalBasis33F doCreateOrthonormalBasisG(final Point3F surfaceIntersectionPoint) {
-		final Vector3F w = Vector3F.directionNormalized(new Point3F(), surfaceIntersectionPoint);
-		final Vector3F v = new Vector3F(-Floats.PI_MULTIPLIED_BY_2 * w.y, Floats.PI_MULTIPLIED_BY_2 * w.x, 0.0F);
-		
-		return new OrthonormalBasis33F(w, v);
-	}
-	
-	private static Point3F doCreateSurfaceIntersectionPoint(final Ray3F ray, final float t) {
-		return Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 	}
 }

@@ -2032,26 +2032,98 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float rayDirectionZ = ray3FGetDirectionZ();
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = 0.0F;
-		final float sphereCenterY = 0.0F;
-		final float sphereCenterZ = 0.0F;
+//		final float sphereCenterX = 0.0F;
+//		final float sphereCenterY = 0.0F;
+//		final float sphereCenterZ = 0.0F;
 		final float sphereRadius = 1.0F;
-		final float sphereRadiusSquared = sphereRadius * sphereRadius;
+//		final float sphereRadiusSquared = sphereRadius * sphereRadius;
+		
+		final float dx = rayDirectionX;
+		final float dy = rayDirectionY;
+		final float dz = rayDirectionZ;
+		final float ox = rayOriginX;
+		final float oy = rayOriginY;
+		final float oz = rayOriginZ;
+		
+		eFloatSetMultiply(0, dx, dx, dx, dx, dx, dx);
+		eFloatSetMultiply(1, dy, dy, dy, dy, dy, dy);
+		eFloatSetMultiply(2, dz, dz, dz, dz, dz, dz);
+		
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[3], super.eFloatArray_$private$9[4], super.eFloatArray_$private$9[5]);
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[6], super.eFloatArray_$private$9[7], super.eFloatArray_$private$9[8]);
+		
+		final float aValue = super.eFloatArray_$private$9[0];
+		final float aLowerBound = super.eFloatArray_$private$9[1];
+		final float aUpperBound = super.eFloatArray_$private$9[2];
+		
+		eFloatSetMultiply(0, dx, dx, dx, ox, ox, ox);
+		eFloatSetMultiply(1, dy, dy, dy, oy, oy, oy);
+		eFloatSetMultiply(2, dz, dz, dz, oz, oz, oz);
+		
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[3], super.eFloatArray_$private$9[4], super.eFloatArray_$private$9[5]);
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[6], super.eFloatArray_$private$9[7], super.eFloatArray_$private$9[8]);
+		
+		eFloatSetMultiply(0, 2.0F, 2.0F, 2.0F, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2]);
+		
+		final float bValue = super.eFloatArray_$private$9[0];
+		final float bLowerBound = super.eFloatArray_$private$9[1];
+		final float bUpperBound = super.eFloatArray_$private$9[2];
+		
+		eFloatSetMultiply(0, ox, ox, ox, ox, ox, ox);
+		eFloatSetMultiply(1, oy, oy, oy, oy, oy, oy);
+		eFloatSetMultiply(2, oz, oz, oz, oz, oz, oz);
+		
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[3], super.eFloatArray_$private$9[4], super.eFloatArray_$private$9[5]);
+		eFloatSetAdd(0, super.eFloatArray_$private$9[0], super.eFloatArray_$private$9[1], super.eFloatArray_$private$9[2], super.eFloatArray_$private$9[6], super.eFloatArray_$private$9[7], super.eFloatArray_$private$9[8]);
+		
+		final float c0Value = super.eFloatArray_$private$9[0];
+		final float c0LowerBound = super.eFloatArray_$private$9[1];
+		final float c0UpperBound = super.eFloatArray_$private$9[2];
+		
+		eFloatSetMultiply(0, sphereRadius, sphereRadius, sphereRadius, sphereRadius, sphereRadius, sphereRadius);
+		
+		final float c1Value = super.eFloatArray_$private$9[0];
+		final float c1LowerBound = super.eFloatArray_$private$9[1];
+		final float c1UpperBound = super.eFloatArray_$private$9[2];
+		
+		eFloatSetSubtract(0, c0Value, c0LowerBound, c0UpperBound, c1Value, c1LowerBound, c1UpperBound);
+		
+		final float cValue = super.eFloatArray_$private$9[0];
+		final float cLowerBound = super.eFloatArray_$private$9[1];
+		final float cUpperBound = super.eFloatArray_$private$9[2];
+		
+		if(eFloatSetQuadratic(aValue, aLowerBound, aUpperBound, bValue, bLowerBound, bUpperBound, cValue, cLowerBound, cUpperBound)) {
+			final float t0Value = super.eFloatArray_$private$9[0];
+			final float t0LowerBound = super.eFloatArray_$private$9[1];
+			final float t0UpperBound = super.eFloatArray_$private$9[2];
+			
+			final float t1Value = super.eFloatArray_$private$9[3];
+			final float t1LowerBound = super.eFloatArray_$private$9[4];
+			final float t1UpperBound = super.eFloatArray_$private$9[5];
+			
+			if(t0UpperBound > rayTMaximum || t1LowerBound <= rayTMinimum) {
+				return 0.0F;
+			}
+			
+			return t0LowerBound <= rayTMinimum ? t1UpperBound > rayTMaximum ? 0.0F : t1Value : t0Value;
+		}
+		
+		return 0.0F;
 		
 //		Compute the direction from the sphere center to the ray origin:
-		final float sphereCenterToRayOriginX = rayOriginX - sphereCenterX;
-		final float sphereCenterToRayOriginY = rayOriginY - sphereCenterY;
-		final float sphereCenterToRayOriginZ = rayOriginZ - sphereCenterZ;
+//		final float sphereCenterToRayOriginX = rayOriginX - sphereCenterX;
+//		final float sphereCenterToRayOriginY = rayOriginY - sphereCenterY;
+//		final float sphereCenterToRayOriginZ = rayOriginZ - sphereCenterZ;
 		
 //		Compute the variables for the quadratic system:
-		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
-		final float b = 2.0F * (sphereCenterToRayOriginX * rayDirectionX + sphereCenterToRayOriginY * rayDirectionY + sphereCenterToRayOriginZ * rayDirectionZ);
-		final float c = (sphereCenterToRayOriginX * sphereCenterToRayOriginX + sphereCenterToRayOriginY * sphereCenterToRayOriginY + sphereCenterToRayOriginZ * sphereCenterToRayOriginZ) - sphereRadiusSquared;
+//		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+//		final float b = 2.0F * (sphereCenterToRayOriginX * rayDirectionX + sphereCenterToRayOriginY * rayDirectionY + sphereCenterToRayOriginZ * rayDirectionZ);
+//		final float c = (sphereCenterToRayOriginX * sphereCenterToRayOriginX + sphereCenterToRayOriginY * sphereCenterToRayOriginY + sphereCenterToRayOriginZ * sphereCenterToRayOriginZ) - sphereRadiusSquared;
 		
 //		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
-		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
+//		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
 		
-		return t;
+//		return t;
 	}
 	
 	/**

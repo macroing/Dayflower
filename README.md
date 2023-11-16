@@ -190,7 +190,7 @@ The following table describes the different APIs and their current status in the
 | Parameter API                          | 100.0%  |   0.0%    |
 | Renderer API                           | 100.0%  | 100.0%    |
 | Renderer CPU API                       | 100.0%  |   0.0%    |
-| Renderer GPU API                       | 100.0%  |   0.0%    |
+| Renderer GPU API                       | ???.?%  |   0.0%    |
 | Renderer Observer API                  | 100.0%  |   0.0%    |
 | Sampler API                            | 100.0%  |   0.0%    |
 | Scene API                              | ???.?%  |   0.0%    |

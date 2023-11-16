@@ -54,6 +54,11 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * A {@code float[]} that contains an error {@code float} value.
+	 */
+	protected float[] eFloatArray_$private$9;
+	
+	/**
 	 * A {@code float[]} that contains the solutions to the quadratic system.
 	 */
 	protected float[] quadraticSystemArray_$private$2;
@@ -106,6 +111,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * Constructs a new {@code AbstractKernel} instance.
 	 */
 	protected AbstractKernel() {
+		this.eFloatArray_$private$9 = new float[9];
 		this.quadraticSystemArray_$private$2 = new float[2];
 		this.simplexGradient3Array = new float[0];
 		this.simplexGradient4Array = new float[0];
@@ -218,6 +224,62 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final boolean checkIsNearlyEqual(final float a, final float b) {
 		return a == b || abs(a - b) < max(Float.MIN_VALUE, 128.0F * 0.00000006F * min(abs(a) + abs(b), Float.MAX_VALUE));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean eFloatSetQuadratic(final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound, final float cValue, final float cLowerBound, final float cUpperBound) {
+		final double discrim = (double)(bValue) * (double)(bValue) - 4.0D * aValue * cValue;
+		
+		if(discrim < 0.0D) {
+			return false;
+		}
+		
+		final double rootDiscrim = sqrt(discrim);
+		
+		eFloatSetValueError(0, (float)(rootDiscrim), 5.9604645E-8F * (float)(rootDiscrim));
+		eFloatSetValue(1, -0.5F);
+		
+		if(bValue < 0.0F) {
+			eFloatSetSubtract(2, bValue, bLowerBound, bUpperBound, this.eFloatArray_$private$9[0], this.eFloatArray_$private$9[1], this.eFloatArray_$private$9[2]);
+			eFloatSetMultiply(2, this.eFloatArray_$private$9[6], this.eFloatArray_$private$9[7], this.eFloatArray_$private$9[8], this.eFloatArray_$private$9[3], this.eFloatArray_$private$9[4], this.eFloatArray_$private$9[5]);
+		} else {
+			eFloatSetAdd(2, bValue, bLowerBound, bUpperBound, this.eFloatArray_$private$9[0], this.eFloatArray_$private$9[1], this.eFloatArray_$private$9[2]);
+			eFloatSetMultiply(2, this.eFloatArray_$private$9[6], this.eFloatArray_$private$9[7], this.eFloatArray_$private$9[8], this.eFloatArray_$private$9[3], this.eFloatArray_$private$9[4], this.eFloatArray_$private$9[5]);
+		}
+		
+		final float qValue = this.eFloatArray_$private$9[6];
+		final float qLowerBound = this.eFloatArray_$private$9[7];
+		final float qUpperBound = this.eFloatArray_$private$9[8];
+		
+		eFloatSetDivide(2, qValue, qLowerBound, qUpperBound, aValue, aLowerBound, aUpperBound);
+		
+		final float t0Value = this.eFloatArray_$private$9[6];
+		final float t0LowerBound = this.eFloatArray_$private$9[7];
+		final float t0UpperBound = this.eFloatArray_$private$9[8];
+		
+		eFloatSetDivide(2, cValue, cLowerBound, cUpperBound, qValue, qLowerBound, qUpperBound);
+		
+		final float t1Value = this.eFloatArray_$private$9[6];
+		final float t1LowerBound = this.eFloatArray_$private$9[7];
+		final float t1UpperBound = this.eFloatArray_$private$9[8];
+		
+		if(t0Value > t1Value) {
+			this.eFloatArray_$private$9[0] = t1Value;
+			this.eFloatArray_$private$9[1] = t1LowerBound;
+			this.eFloatArray_$private$9[2] = t1UpperBound;
+			this.eFloatArray_$private$9[3] = t0Value;
+			this.eFloatArray_$private$9[4] = t0LowerBound;
+			this.eFloatArray_$private$9[5] = t0UpperBound;
+		} else {
+			this.eFloatArray_$private$9[0] = t0Value;
+			this.eFloatArray_$private$9[1] = t0LowerBound;
+			this.eFloatArray_$private$9[2] = t0UpperBound;
+			this.eFloatArray_$private$9[3] = t1Value;
+			this.eFloatArray_$private$9[4] = t1LowerBound;
+			this.eFloatArray_$private$9[5] = t1UpperBound;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -1706,6 +1768,117 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final int saturateI(final int value, final int valueMinimum, final int valueMaximum) {
 		return max(min(value, valueMaximum), valueMinimum);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSet(final int index) {
+		eFloatSetValue(index, 0.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetAbs(final int index, final float value, final float lowerBound, final float upperBound) {
+		if(lowerBound >= 0.0F) {
+			this.eFloatArray_$private$9[index * 3 + 0] = value;
+			this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
+			this.eFloatArray_$private$9[index * 3 + 2] = upperBound;
+		} else if(upperBound <= 0.0F) {
+			this.eFloatArray_$private$9[index * 3 + 0] = -value;
+			this.eFloatArray_$private$9[index * 3 + 1] = -upperBound;
+			this.eFloatArray_$private$9[index * 3 + 2] = -lowerBound;
+		} else {
+			this.eFloatArray_$private$9[index * 3 + 0] = abs(value);
+			this.eFloatArray_$private$9[index * 3 + 1] = 0.0F;
+			this.eFloatArray_$private$9[index * 3 + 2] = max(-lowerBound, upperBound);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetAdd(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
+		this.eFloatArray_$private$9[index * 3 + 0] = aValue + bValue;
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound + bLowerBound, -1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound + bUpperBound, +1);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetDivide(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
+		final float value = aValue / bValue;
+		
+		if(bLowerBound < 0.0F && bUpperBound > 0.0F) {
+			final float lowerBound = Float.NEGATIVE_INFINITY;
+			final float upperBound = Float.POSITIVE_INFINITY;
+			
+			this.eFloatArray_$private$9[index * 3 + 0] = value;
+			this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
+			this.eFloatArray_$private$9[index * 3 + 2] = upperBound;
+		} else {
+			final float div0 = aLowerBound / bLowerBound;
+			final float div1 = aUpperBound / bLowerBound;
+			final float div2 = aLowerBound / bUpperBound;
+			final float div3 = aUpperBound / bUpperBound;
+			
+			final float lowerBound = nextAfter(min(min(div0, div1), min(div2, div3)), -1);
+			final float upperBound = nextAfter(max(max(div0, div1), max(div2, div3)), +1);
+			
+			this.eFloatArray_$private$9[index * 3 + 0] = value;
+			this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
+			this.eFloatArray_$private$9[index * 3 + 2] = upperBound;
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetMultiply(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
+		final float value = aValue * bValue;
+		
+		final float prod0 = aLowerBound * bLowerBound;
+		final float prod1 = aUpperBound * bLowerBound;
+		final float prod2 = aLowerBound * bUpperBound;
+		final float prod3 = aUpperBound * bUpperBound;
+		
+		final float lowerBound = nextAfter(min(min(prod0, prod1), min(prod2, prod3)), -1);
+		final float upperBound = nextAfter(max(max(prod0, prod1), max(prod2, prod3)), +1);
+		
+		this.eFloatArray_$private$9[index * 3 + 0] = value;
+		this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
+		this.eFloatArray_$private$9[index * 3 + 2] = upperBound;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetNegate(final int index, final float value, final float lowerBound, final float upperBound) {
+		this.eFloatArray_$private$9[index * 3 + 0] = -value;
+		this.eFloatArray_$private$9[index * 3 + 1] = -upperBound;
+		this.eFloatArray_$private$9[index * 3 + 2] = -lowerBound;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetSqrt(final int index, final float value, final float lowerBound, final float upperBound) {
+		this.eFloatArray_$private$9[index * 3 + 0] = sqrt(value);
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(sqrt(lowerBound), -1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(sqrt(upperBound), +1);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetSubtract(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
+		this.eFloatArray_$private$9[index * 3 + 0] = aValue - bValue;
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound - bUpperBound, -1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound - bLowerBound, +1);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetValue(final int index, final float value) {
+		eFloatSetValueError(index, value, 0.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void eFloatSetValueError(final int index, final float value, final float error) {
+		if(error == 0.0F) {
+			this.eFloatArray_$private$9[index * 3 + 0] = value;
+			this.eFloatArray_$private$9[index * 3 + 1] = value;
+			this.eFloatArray_$private$9[index * 3 + 2] = value;
+		} else {
+			this.eFloatArray_$private$9[index * 3 + 0] = value;
+			this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(value - error, -1);
+			this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(value + error, +1);
+		}
 	}
 	
 	/**

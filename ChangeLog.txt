@@ -1,3 +1,7 @@
+2023-12-30  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the copyright notice.
+
 2023-11-16  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add an error float implementation to the sphere in the GPU-renderer.

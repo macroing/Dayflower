@@ -1,5 +1,5 @@
 /**
- * Copyright 20.0D14 - 20.0D22 J&#246;rgen Lundgren
+ * Copyright 2014 - 2024 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 

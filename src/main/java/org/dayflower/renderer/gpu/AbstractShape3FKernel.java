@@ -2611,6 +2611,138 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 1];
 		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_POSITION + 2];
 		
+		final float p0T0X = triangleAPositionX - rayOriginX;
+		final float p0T0Y = triangleAPositionY - rayOriginY;
+		final float p0T0Z = triangleAPositionZ - rayOriginZ;
+		
+		final float p1T0X = triangleBPositionX - rayOriginX;
+		final float p1T0Y = triangleBPositionY - rayOriginY;
+		final float p1T0Z = triangleBPositionZ - rayOriginZ;
+		
+		final float p2T0X = triangleCPositionX - rayOriginX;
+		final float p2T0Y = triangleCPositionY - rayOriginY;
+		final float p2T0Z = triangleCPositionZ - rayOriginZ;
+		
+		int kz = abs(rayDirectionX) > abs(rayDirectionY) ? abs(rayDirectionX) > abs(rayDirectionZ) ? 0 : 2 : abs(rayDirectionY) > abs(rayDirectionZ) ? 1 : 2;
+		int kx = kz + 1;
+		
+		if(kx == 3) {
+			kx = 0;
+		}
+		
+		int ky = kx + 1;
+		
+		if(ky == 3) {
+			ky = 0;
+		}
+		
+		final float dX = kx == 0 ? rayDirectionX : kx == 1 ? rayDirectionY : rayDirectionZ;
+		final float dY = ky == 0 ? rayDirectionX : ky == 1 ? rayDirectionY : rayDirectionZ;
+		final float dZ = kz == 0 ? rayDirectionX : kz == 1 ? rayDirectionY : rayDirectionZ;
+		
+		final float p0T1X = kx == 0 ? p0T0X : kx == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Y = ky == 0 ? p0T0X : ky == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Z = kz == 0 ? p0T0X : kz == 1 ? p0T0Y : p0T0Z;
+		
+		final float p1T1X = kx == 0 ? p1T0X : kx == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Y = ky == 0 ? p1T0X : ky == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Z = kz == 0 ? p1T0X : kz == 1 ? p1T0Y : p1T0Z;
+		
+		final float p2T1X = kx == 0 ? p2T0X : kx == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Y = ky == 0 ? p2T0X : ky == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Z = kz == 0 ? p2T0X : kz == 1 ? p2T0Y : p2T0Z;
+		
+		final float sx = -dX / dZ;
+		final float sy = -dY / dZ;
+		final float sz = 1.0F / dZ;
+		
+		final float p0T2X = p0T1X + sx * p0T1Z;
+		final float p0T2Y = p0T1Y + sy * p0T1Z;
+		final float p0T2Z = p0T1Z;
+		
+		final float p1T2X = p1T1X + sx * p1T1Z;
+		final float p1T2Y = p1T1Y + sy * p1T1Z;
+		final float p1T2Z = p1T1Z;
+		
+		final float p2T2X = p2T1X + sx * p2T1Z;
+		final float p2T2Y = p2T1Y + sy * p2T1Z;
+		final float p2T2Z = p2T1Z;
+		
+		float e0 = p1T2X * p2T2Y - p1T2Y * p2T2X;
+		float e1 = p2T2X * p0T2Y - p2T2Y * p0T2X;
+		float e2 = p0T2X * p1T2Y - p0T2Y * p1T2X;
+		
+		if(e0 == 0.0F || e1 == 0.0F || e2 == 0.0F) {
+			final double p2txp1ty = (double)(p2T2X) * (double)(p1T2Y);
+			final double p2typ1tx = (double)(p2T2Y) * (double)(p1T2X);
+			
+			e0 = (float)(p2typ1tx - p2txp1ty);
+			
+			final double p0txp2ty = (double)(p0T2X) * (double)(p2T2Y);
+			final double p0typ2tx = (double)(p0T2Y) * (double)(p2T2X);
+			
+			e1 = (float)(p0typ2tx - p0txp2ty);
+			
+			final double p1txp0ty = (double)(p1T2X) * (double)(p0T2Y);
+			final double p1typ0tx = (double)(p1T2Y) * (double)(p0T2X);
+			
+			e2 = (float)(p1typ0tx - p1txp0ty);
+		}
+		
+		if((e0 < 0.0F || e1 < 0.0F || e2 < 0.0F) && (e0 > 0.0F || e1 > 0.0F || e2 > 0.0F)) {
+			return 0.0F;
+		}
+		
+		final float det = e0 + e1 + e2;
+		
+		if(det == 0.0F) {
+			return 0.0F;
+		}
+		
+		final float p0T3X = p0T2X;
+		final float p0T3Y = p0T2Y;
+		final float p0T3Z = p0T2Z * sz;
+		
+		final float p1T3X = p1T2X;
+		final float p1T3Y = p1T2Y;
+		final float p1T3Z = p1T2Z * sz;
+		
+		final float p2T3X = p2T2X;
+		final float p2T3Y = p2T2Y;
+		final float p2T3Z = p2T2Z * sz;
+		
+		float tScaled = e0 * p0T3Z + e1 * p1T3Z + e2 * p2T3Z;
+		
+		if(det < 0.0F && (tScaled >= 0.0F || tScaled < rayTMaximum * det)) {
+			return 0.0F;
+		} else if(det > 0.0F && (tScaled <= 0.0F || tScaled > rayTMaximum * det)) {
+			return 0.0F;
+		}
+		
+		final float invDet = 1.0F / det;
+		
+		final float t = tScaled * invDet;
+		
+		final float maxZT = max(abs(p0T3Z), abs(p1T3Z), abs(p2T3Z));
+		final float maxXT = max(abs(p0T3X), abs(p1T3X), abs(p2T3X));
+		final float maxYT = max(abs(p0T3Y), abs(p1T3Y), abs(p2T3Y));
+		
+		final float deltaZ = gamma(3) * maxZT;
+		final float deltaX = gamma(5) * (maxXT + maxZT);
+		final float deltaY = gamma(5) * (maxYT + maxZT);
+		final float deltaE = 2.0F * (gamma(2) * maxXT * maxYT + deltaY * maxXT + deltaX * maxYT);
+		
+		final float maxE = max(abs(e0), abs(e1), abs(e2));
+		
+		final float deltaT = 3.0F * (gamma(3) * maxE * maxZT + deltaE * maxZT + deltaZ * maxE) * abs(invDet);
+		
+		if(t <= deltaT) {
+			return 0.0F;
+		}
+		
+		return t;
+		
+		/*
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
 		final float edgeABX = triangleBPositionX - triangleAPositionX;
 		final float edgeABY = triangleBPositionY - triangleAPositionY;
@@ -2664,6 +2796,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		}
 		
 		return t;
+		*/
 	}
 	
 	/**
@@ -2712,6 +2845,289 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
 		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
 		
+		final float p0T0X = triangleAPositionX - rayOriginX;
+		final float p0T0Y = triangleAPositionY - rayOriginY;
+		final float p0T0Z = triangleAPositionZ - rayOriginZ;
+		
+		final float p1T0X = triangleBPositionX - rayOriginX;
+		final float p1T0Y = triangleBPositionY - rayOriginY;
+		final float p1T0Z = triangleBPositionZ - rayOriginZ;
+		
+		final float p2T0X = triangleCPositionX - rayOriginX;
+		final float p2T0Y = triangleCPositionY - rayOriginY;
+		final float p2T0Z = triangleCPositionZ - rayOriginZ;
+		
+		int kz = abs(rayDirectionX) > abs(rayDirectionY) ? abs(rayDirectionX) > abs(rayDirectionZ) ? 0 : 2 : abs(rayDirectionY) > abs(rayDirectionZ) ? 1 : 2;
+		int kx = kz + 1;
+		
+		if(kx == 3) {
+			kx = 0;
+		}
+		
+		int ky = kx + 1;
+		
+		if(ky == 3) {
+			ky = 0;
+		}
+		
+		final float dX = kx == 0 ? rayDirectionX : kx == 1 ? rayDirectionY : rayDirectionZ;
+		final float dY = ky == 0 ? rayDirectionX : ky == 1 ? rayDirectionY : rayDirectionZ;
+		final float dZ = kz == 0 ? rayDirectionX : kz == 1 ? rayDirectionY : rayDirectionZ;
+		
+		final float p0T1X = kx == 0 ? p0T0X : kx == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Y = ky == 0 ? p0T0X : ky == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Z = kz == 0 ? p0T0X : kz == 1 ? p0T0Y : p0T0Z;
+		
+		final float p1T1X = kx == 0 ? p1T0X : kx == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Y = ky == 0 ? p1T0X : ky == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Z = kz == 0 ? p1T0X : kz == 1 ? p1T0Y : p1T0Z;
+		
+		final float p2T1X = kx == 0 ? p2T0X : kx == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Y = ky == 0 ? p2T0X : ky == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Z = kz == 0 ? p2T0X : kz == 1 ? p2T0Y : p2T0Z;
+		
+		final float sx = -dX / dZ;
+		final float sy = -dY / dZ;
+		
+		final float p0T2X = p0T1X + sx * p0T1Z;
+		final float p0T2Y = p0T1Y + sy * p0T1Z;
+		
+		final float p1T2X = p1T1X + sx * p1T1Z;
+		final float p1T2Y = p1T1Y + sy * p1T1Z;
+		
+		final float p2T2X = p2T1X + sx * p2T1Z;
+		final float p2T2Y = p2T1Y + sy * p2T1Z;
+		
+		float e0 = p1T2X * p2T2Y - p1T2Y * p2T2X;
+		float e1 = p2T2X * p0T2Y - p2T2Y * p0T2X;
+		float e2 = p0T2X * p1T2Y - p0T2Y * p1T2X;
+		
+		if(e0 == 0.0F || e1 == 0.0F || e2 == 0.0F) {
+			final double p2txp1ty = (double)(p2T2X) * (double)(p1T2Y);
+			final double p2typ1tx = (double)(p2T2Y) * (double)(p1T2X);
+			
+			e0 = (float)(p2typ1tx - p2txp1ty);
+			
+			final double p0txp2ty = (double)(p0T2X) * (double)(p2T2Y);
+			final double p0typ2tx = (double)(p0T2Y) * (double)(p2T2X);
+			
+			e1 = (float)(p0typ2tx - p0txp2ty);
+			
+			final double p1txp0ty = (double)(p1T2X) * (double)(p0T2Y);
+			final double p1typ0tx = (double)(p1T2Y) * (double)(p0T2X);
+			
+			e2 = (float)(p1typ0tx - p1txp0ty);
+		}
+		
+		final float det = e0 + e1 + e2;
+		
+		final float invDet = 1.0F / det;
+		
+		final float b0 = e0 * invDet;
+		final float b1 = e1 * invDet;
+		final float b2 = e2 * invDet;
+		
+		float dpduX = 0.0F;
+		float dpduY = 0.0F;
+		float dpduZ = 0.0F;
+		
+		float dpdvX = 0.0F;
+		float dpdvY = 0.0F;
+		float dpdvZ = 0.0F;
+		
+		final float duv02X = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float duv02Y = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
+		
+		final float duv12X = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float duv12Y = triangleBTextureCoordinatesV - triangleCTextureCoordinatesV;
+		
+		final float dp02X = triangleAPositionX - triangleCPositionX;
+		final float dp02Y = triangleAPositionY - triangleCPositionY;
+		final float dp02Z = triangleAPositionZ - triangleCPositionZ;
+		
+		final float dp12X = triangleBPositionX - triangleCPositionX;
+		final float dp12Y = triangleBPositionY - triangleCPositionY;
+		final float dp12Z = triangleBPositionZ - triangleCPositionZ;
+		
+		final float determinant = duv02X * duv12Y - duv02Y * duv12X;
+		
+		final boolean degenerateUV = abs(determinant) < 1.0e-8F;
+		
+		if(!degenerateUV) {
+			final float invDeterminant = 1.0F / determinant;
+			
+			dpduX = (duv12Y * dp02X - duv02Y * dp12X) * invDeterminant;
+			dpduY = (duv12Y * dp02Y - duv02Y * dp12Y) * invDeterminant;
+			dpduZ = (duv12Y * dp02Z - duv02Y * dp12Z) * invDeterminant;
+			
+			dpdvX = (-duv12X * dp02X + duv02X * dp12X) * invDeterminant;
+			dpdvY = (-duv12X * dp02Y + duv02X * dp12Y) * invDeterminant;
+			dpdvZ = (-duv12X * dp02Z + duv02X * dp12Z) * invDeterminant;
+		}
+		
+		final float crossProductX = dpduY * dpdvZ - dpduZ * dpdvY;
+		final float crossProductY = dpduZ * dpdvX - dpduX * dpdvZ;
+		final float crossProductZ = dpduX * dpdvY - dpduY * dpdvX;
+		
+		final float lengthSquared = crossProductX * crossProductX + crossProductY * crossProductY + crossProductZ * crossProductZ;
+		
+		if(degenerateUV || lengthSquared == 0.0F) {
+			final float aX = triangleCPositionX - triangleAPositionX;
+			final float aY = triangleCPositionY - triangleAPositionY;
+			final float aZ = triangleCPositionZ - triangleAPositionZ;
+			
+			final float bX = triangleBPositionX - triangleAPositionX;
+			final float bY = triangleBPositionY - triangleAPositionY;
+			final float bZ = triangleBPositionZ - triangleAPositionZ;
+			
+			final float ngX = aY * bZ - aZ * bY;
+			final float ngY = aZ * bX - aX * bZ;
+			final float ngZ = aX * bY - aY * bX;
+			
+			final float lengthSquared2 = ngX * ngX + ngY * ngY + ngZ * ngZ;
+			
+			if(lengthSquared2 == 0.0F) {
+				return;
+			}
+			
+			final float length = sqrt(lengthSquared2);
+			final float lengthReciprocal = 1.0F / length;
+			
+			final float ngNormalizedX = ngX * lengthReciprocal;
+			final float ngNormalizedY = ngY * lengthReciprocal;
+			final float ngNormalizedZ = ngZ * lengthReciprocal;
+			
+			final float wX = ngNormalizedX;
+			final float wY = ngNormalizedY;
+			final float wZ = ngNormalizedZ;
+			
+			final float uUnnormalizedX = abs(wX) > abs(wY) ? -wZ : 0.0F;
+			final float uUnnormalizedY = abs(wX) > abs(wY) ? 0.0F : wZ;
+			final float uUnnormalizedZ = abs(wX) > abs(wY) ? wX : -wY;
+			final float uLengthReciprocal = vector3FLengthReciprocal(uUnnormalizedX, uUnnormalizedY, uUnnormalizedZ);
+			final float uX = uUnnormalizedX * uLengthReciprocal;
+			final float uY = uUnnormalizedY * uLengthReciprocal;
+			final float uZ = uUnnormalizedZ * uLengthReciprocal;
+			
+			final float vX = wY * uZ - wZ * uY;
+			final float vY = wZ * uX - wX * uZ;
+			final float vZ = wX * uY - wY * uX;
+			
+			dpduX = uX;
+			dpduY = uY;
+			dpduZ = uZ;
+			
+			dpdvX = vX;
+			dpdvY = vY;
+			dpdvZ = vZ;
+		}
+		
+		final float pHitX = b0 * triangleAPositionX + b1 * triangleBPositionX + b2 * triangleCPositionX;
+		final float pHitY = b0 * triangleAPositionY + b1 * triangleBPositionY + b2 * triangleCPositionY;
+		final float pHitZ = b0 * triangleAPositionZ + b1 * triangleBPositionZ + b2 * triangleCPositionZ;
+		
+		final float uvHitX = b0 * triangleATextureCoordinatesU + b1 * triangleBTextureCoordinatesU + b2 * triangleCTextureCoordinatesU;
+		final float uvHitY = b0 * triangleATextureCoordinatesV + b1 * triangleBTextureCoordinatesV + b2 * triangleCTextureCoordinatesV;
+		
+		final float nUnnormalizedX = dp02Y * dp12Z - dp02Z * dp12Y;
+		final float nUnnormalizedY = dp02Z * dp12X - dp02X * dp12Z;
+		final float nUnnormalizedZ = dp02X * dp12Y - dp02Y * dp12X;
+		final float nLengthReciprocal = vector3FLengthReciprocal(nUnnormalizedX, nUnnormalizedY, nUnnormalizedZ);
+		final float nX = nUnnormalizedX * nLengthReciprocal;
+		final float nY = nUnnormalizedY * nLengthReciprocal;
+		final float nZ = nUnnormalizedZ * nLengthReciprocal;
+		
+		float nsX = b0 * triangleAOrthonormalBasisWX + b1 * triangleBOrthonormalBasisWX + b2 * triangleCOrthonormalBasisWX;
+		float nsY = b0 * triangleAOrthonormalBasisWY + b1 * triangleBOrthonormalBasisWY + b2 * triangleCOrthonormalBasisWY;
+		float nsZ = b0 * triangleAOrthonormalBasisWZ + b1 * triangleBOrthonormalBasisWZ + b2 * triangleCOrthonormalBasisWZ;
+		
+		if(vector3FLengthSquared(nsX, nsY, nsZ) > 0.0F) {
+			final float nsLengthReciprocal = vector3FLengthReciprocal(nsX, nsY, nsZ);
+			
+			nsX *= nsLengthReciprocal;
+			nsY *= nsLengthReciprocal;
+			nsZ *= nsLengthReciprocal;
+		} else {
+			nsX = nX;
+			nsY = nY;
+			nsZ = nZ;
+		}
+		
+		final float ssLengthReciprocal = vector3FLengthReciprocal(dpduX, dpduY, dpduZ);
+		
+		float ssX = dpduX * ssLengthReciprocal;
+		float ssY = dpduY * ssLengthReciprocal;
+		float ssZ = dpduZ * ssLengthReciprocal;
+		
+		float tsX = ssY * nsZ - ssZ * nsY;
+		float tsY = ssZ * nsX - ssX * nsZ;
+		float tsZ = ssX * nsY - ssY * nsX;
+		
+		if(vector3FLengthSquared(tsX, tsY, tsZ) > 0.0F) {
+			final float tsLengthReciprocal = vector3FLengthReciprocal(tsX, tsY, tsZ);
+			
+			tsX *= tsLengthReciprocal;
+			tsY *= tsLengthReciprocal;
+			tsZ *= tsLengthReciprocal;
+			
+			ssX = tsY * nsZ - tsZ * nsY;
+			ssY = tsZ * nsX - tsX * nsZ;
+			ssZ = tsX * nsY - tsY * nsX;
+		} else {
+			final float wX = nX;
+			final float wY = nY;
+			final float wZ = nZ;
+			
+			final float uUnnormalizedX = abs(wX) > abs(wY) ? -wZ : 0.0F;
+			final float uUnnormalizedY = abs(wX) > abs(wY) ? 0.0F : wZ;
+			final float uUnnormalizedZ = abs(wX) > abs(wY) ? wX : -wY;
+			final float uLengthReciprocal = vector3FLengthReciprocal(uUnnormalizedX, uUnnormalizedY, uUnnormalizedZ);
+			final float uX = uUnnormalizedX * uLengthReciprocal;
+			final float uY = uUnnormalizedY * uLengthReciprocal;
+			final float uZ = uUnnormalizedZ * uLengthReciprocal;
+			
+			final float vX = wY * uZ - wZ * uY;
+			final float vY = wZ * uX - wX * uZ;
+			final float vZ = wX * uY - wY * uX;
+			
+			ssX = uX;
+			ssY = uY;
+			ssZ = uZ;
+			
+			tsX = vX;
+			tsY = vY;
+			tsZ = vZ;
+		}
+		
+		final float wUnnormalizedX = ssY * tsZ - ssZ * tsY;
+		final float wUnnormalizedY = ssZ * tsX - ssX * tsZ;
+		final float wUnnormalizedZ = ssX * tsY - ssY * tsX;
+		final float wLengthReciprocal = vector3FLengthReciprocal(wUnnormalizedX, wUnnormalizedY, wUnnormalizedZ);
+		final float wX = wUnnormalizedX * wLengthReciprocal;
+		final float wY = wUnnormalizedY * wLengthReciprocal;
+		final float wZ = wUnnormalizedZ * wLengthReciprocal;
+		
+		final boolean isNegating = nsX * wX + nsY * wY + nsZ * wZ < 0.0F;
+		
+		if(isNegating) {
+			nsX = -nsX;
+			nsY = -nsY;
+			nsZ = -nsZ;
+		}
+		
+		orthonormalBasis33FSetFromWVU(nsX, nsY, nsZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		
+		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		
+		orthonormalBasis33FSetFromWVU(wX, wY, wZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		
+//		Update the intersection array:
+		intersectionLHSSetOrthonormalBasisSFromOrthonormalBasis33F();
+		intersectionLHSSetPrimitiveIndex(primitiveIndex);
+		intersectionLHSSetSurfaceIntersectionPoint(pHitX, pHitY, pHitZ);
+		intersectionLHSSetTextureCoordinates(uvHitX, uvHitY);
+		
+		/*
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
 		final float edgeABX = triangleBPositionX - triangleAPositionX;
 		final float edgeABY = triangleBPositionY - triangleAPositionY;
@@ -2807,6 +3223,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		intersectionLHSSetPrimitiveIndex(primitiveIndex);
 		intersectionLHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionLHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		*/
 	}
 	
 	/**
@@ -2855,6 +3272,289 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
 		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + CompiledShape3FCache.TRIANGLE_3_F_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
 		
+		final float p0T0X = triangleAPositionX - rayOriginX;
+		final float p0T0Y = triangleAPositionY - rayOriginY;
+		final float p0T0Z = triangleAPositionZ - rayOriginZ;
+		
+		final float p1T0X = triangleBPositionX - rayOriginX;
+		final float p1T0Y = triangleBPositionY - rayOriginY;
+		final float p1T0Z = triangleBPositionZ - rayOriginZ;
+		
+		final float p2T0X = triangleCPositionX - rayOriginX;
+		final float p2T0Y = triangleCPositionY - rayOriginY;
+		final float p2T0Z = triangleCPositionZ - rayOriginZ;
+		
+		int kz = abs(rayDirectionX) > abs(rayDirectionY) ? abs(rayDirectionX) > abs(rayDirectionZ) ? 0 : 2 : abs(rayDirectionY) > abs(rayDirectionZ) ? 1 : 2;
+		int kx = kz + 1;
+		
+		if(kx == 3) {
+			kx = 0;
+		}
+		
+		int ky = kx + 1;
+		
+		if(ky == 3) {
+			ky = 0;
+		}
+		
+		final float dX = kx == 0 ? rayDirectionX : kx == 1 ? rayDirectionY : rayDirectionZ;
+		final float dY = ky == 0 ? rayDirectionX : ky == 1 ? rayDirectionY : rayDirectionZ;
+		final float dZ = kz == 0 ? rayDirectionX : kz == 1 ? rayDirectionY : rayDirectionZ;
+		
+		final float p0T1X = kx == 0 ? p0T0X : kx == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Y = ky == 0 ? p0T0X : ky == 1 ? p0T0Y : p0T0Z;
+		final float p0T1Z = kz == 0 ? p0T0X : kz == 1 ? p0T0Y : p0T0Z;
+		
+		final float p1T1X = kx == 0 ? p1T0X : kx == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Y = ky == 0 ? p1T0X : ky == 1 ? p1T0Y : p1T0Z;
+		final float p1T1Z = kz == 0 ? p1T0X : kz == 1 ? p1T0Y : p1T0Z;
+		
+		final float p2T1X = kx == 0 ? p2T0X : kx == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Y = ky == 0 ? p2T0X : ky == 1 ? p2T0Y : p2T0Z;
+		final float p2T1Z = kz == 0 ? p2T0X : kz == 1 ? p2T0Y : p2T0Z;
+		
+		final float sx = -dX / dZ;
+		final float sy = -dY / dZ;
+		
+		final float p0T2X = p0T1X + sx * p0T1Z;
+		final float p0T2Y = p0T1Y + sy * p0T1Z;
+		
+		final float p1T2X = p1T1X + sx * p1T1Z;
+		final float p1T2Y = p1T1Y + sy * p1T1Z;
+		
+		final float p2T2X = p2T1X + sx * p2T1Z;
+		final float p2T2Y = p2T1Y + sy * p2T1Z;
+		
+		float e0 = p1T2X * p2T2Y - p1T2Y * p2T2X;
+		float e1 = p2T2X * p0T2Y - p2T2Y * p0T2X;
+		float e2 = p0T2X * p1T2Y - p0T2Y * p1T2X;
+		
+		if(e0 == 0.0F || e1 == 0.0F || e2 == 0.0F) {
+			final double p2txp1ty = (double)(p2T2X) * (double)(p1T2Y);
+			final double p2typ1tx = (double)(p2T2Y) * (double)(p1T2X);
+			
+			e0 = (float)(p2typ1tx - p2txp1ty);
+			
+			final double p0txp2ty = (double)(p0T2X) * (double)(p2T2Y);
+			final double p0typ2tx = (double)(p0T2Y) * (double)(p2T2X);
+			
+			e1 = (float)(p0typ2tx - p0txp2ty);
+			
+			final double p1txp0ty = (double)(p1T2X) * (double)(p0T2Y);
+			final double p1typ0tx = (double)(p1T2Y) * (double)(p0T2X);
+			
+			e2 = (float)(p1typ0tx - p1txp0ty);
+		}
+		
+		final float det = e0 + e1 + e2;
+		
+		final float invDet = 1.0F / det;
+		
+		final float b0 = e0 * invDet;
+		final float b1 = e1 * invDet;
+		final float b2 = e2 * invDet;
+		
+		float dpduX = 0.0F;
+		float dpduY = 0.0F;
+		float dpduZ = 0.0F;
+		
+		float dpdvX = 0.0F;
+		float dpdvY = 0.0F;
+		float dpdvZ = 0.0F;
+		
+		final float duv02X = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float duv02Y = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
+		
+		final float duv12X = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float duv12Y = triangleBTextureCoordinatesV - triangleCTextureCoordinatesV;
+		
+		final float dp02X = triangleAPositionX - triangleCPositionX;
+		final float dp02Y = triangleAPositionY - triangleCPositionY;
+		final float dp02Z = triangleAPositionZ - triangleCPositionZ;
+		
+		final float dp12X = triangleBPositionX - triangleCPositionX;
+		final float dp12Y = triangleBPositionY - triangleCPositionY;
+		final float dp12Z = triangleBPositionZ - triangleCPositionZ;
+		
+		final float determinant = duv02X * duv12Y - duv02Y * duv12X;
+		
+		final boolean degenerateUV = abs(determinant) < 1.0e-8F;
+		
+		if(!degenerateUV) {
+			final float invDeterminant = 1.0F / determinant;
+			
+			dpduX = (duv12Y * dp02X - duv02Y * dp12X) * invDeterminant;
+			dpduY = (duv12Y * dp02Y - duv02Y * dp12Y) * invDeterminant;
+			dpduZ = (duv12Y * dp02Z - duv02Y * dp12Z) * invDeterminant;
+			
+			dpdvX = (-duv12X * dp02X + duv02X * dp12X) * invDeterminant;
+			dpdvY = (-duv12X * dp02Y + duv02X * dp12Y) * invDeterminant;
+			dpdvZ = (-duv12X * dp02Z + duv02X * dp12Z) * invDeterminant;
+		}
+		
+		final float crossProductX = dpduY * dpdvZ - dpduZ * dpdvY;
+		final float crossProductY = dpduZ * dpdvX - dpduX * dpdvZ;
+		final float crossProductZ = dpduX * dpdvY - dpduY * dpdvX;
+		
+		final float lengthSquared = crossProductX * crossProductX + crossProductY * crossProductY + crossProductZ * crossProductZ;
+		
+		if(degenerateUV || lengthSquared == 0.0F) {
+			final float aX = triangleCPositionX - triangleAPositionX;
+			final float aY = triangleCPositionY - triangleAPositionY;
+			final float aZ = triangleCPositionZ - triangleAPositionZ;
+			
+			final float bX = triangleBPositionX - triangleAPositionX;
+			final float bY = triangleBPositionY - triangleAPositionY;
+			final float bZ = triangleBPositionZ - triangleAPositionZ;
+			
+			final float ngX = aY * bZ - aZ * bY;
+			final float ngY = aZ * bX - aX * bZ;
+			final float ngZ = aX * bY - aY * bX;
+			
+			final float lengthSquared2 = ngX * ngX + ngY * ngY + ngZ * ngZ;
+			
+			if(lengthSquared2 == 0.0F) {
+				return;
+			}
+			
+			final float length = sqrt(lengthSquared2);
+			final float lengthReciprocal = 1.0F / length;
+			
+			final float ngNormalizedX = ngX * lengthReciprocal;
+			final float ngNormalizedY = ngY * lengthReciprocal;
+			final float ngNormalizedZ = ngZ * lengthReciprocal;
+			
+			final float wX = ngNormalizedX;
+			final float wY = ngNormalizedY;
+			final float wZ = ngNormalizedZ;
+			
+			final float uUnnormalizedX = abs(wX) > abs(wY) ? -wZ : 0.0F;
+			final float uUnnormalizedY = abs(wX) > abs(wY) ? 0.0F : wZ;
+			final float uUnnormalizedZ = abs(wX) > abs(wY) ? wX : -wY;
+			final float uLengthReciprocal = vector3FLengthReciprocal(uUnnormalizedX, uUnnormalizedY, uUnnormalizedZ);
+			final float uX = uUnnormalizedX * uLengthReciprocal;
+			final float uY = uUnnormalizedY * uLengthReciprocal;
+			final float uZ = uUnnormalizedZ * uLengthReciprocal;
+			
+			final float vX = wY * uZ - wZ * uY;
+			final float vY = wZ * uX - wX * uZ;
+			final float vZ = wX * uY - wY * uX;
+			
+			dpduX = uX;
+			dpduY = uY;
+			dpduZ = uZ;
+			
+			dpdvX = vX;
+			dpdvY = vY;
+			dpdvZ = vZ;
+		}
+		
+		final float pHitX = b0 * triangleAPositionX + b1 * triangleBPositionX + b2 * triangleCPositionX;
+		final float pHitY = b0 * triangleAPositionY + b1 * triangleBPositionY + b2 * triangleCPositionY;
+		final float pHitZ = b0 * triangleAPositionZ + b1 * triangleBPositionZ + b2 * triangleCPositionZ;
+		
+		final float uvHitX = b0 * triangleATextureCoordinatesU + b1 * triangleBTextureCoordinatesU + b2 * triangleCTextureCoordinatesU;
+		final float uvHitY = b0 * triangleATextureCoordinatesV + b1 * triangleBTextureCoordinatesV + b2 * triangleCTextureCoordinatesV;
+		
+		final float nUnnormalizedX = dp02Y * dp12Z - dp02Z * dp12Y;
+		final float nUnnormalizedY = dp02Z * dp12X - dp02X * dp12Z;
+		final float nUnnormalizedZ = dp02X * dp12Y - dp02Y * dp12X;
+		final float nLengthReciprocal = vector3FLengthReciprocal(nUnnormalizedX, nUnnormalizedY, nUnnormalizedZ);
+		final float nX = nUnnormalizedX * nLengthReciprocal;
+		final float nY = nUnnormalizedY * nLengthReciprocal;
+		final float nZ = nUnnormalizedZ * nLengthReciprocal;
+		
+		float nsX = b0 * triangleAOrthonormalBasisWX + b1 * triangleBOrthonormalBasisWX + b2 * triangleCOrthonormalBasisWX;
+		float nsY = b0 * triangleAOrthonormalBasisWY + b1 * triangleBOrthonormalBasisWY + b2 * triangleCOrthonormalBasisWY;
+		float nsZ = b0 * triangleAOrthonormalBasisWZ + b1 * triangleBOrthonormalBasisWZ + b2 * triangleCOrthonormalBasisWZ;
+		
+		if(vector3FLengthSquared(nsX, nsY, nsZ) > 0.0F) {
+			final float nsLengthReciprocal = vector3FLengthReciprocal(nsX, nsY, nsZ);
+			
+			nsX *= nsLengthReciprocal;
+			nsY *= nsLengthReciprocal;
+			nsZ *= nsLengthReciprocal;
+		} else {
+			nsX = nX;
+			nsY = nY;
+			nsZ = nZ;
+		}
+		
+		final float ssLengthReciprocal = vector3FLengthReciprocal(dpduX, dpduY, dpduZ);
+		
+		float ssX = dpduX * ssLengthReciprocal;
+		float ssY = dpduY * ssLengthReciprocal;
+		float ssZ = dpduZ * ssLengthReciprocal;
+		
+		float tsX = ssY * nsZ - ssZ * nsY;
+		float tsY = ssZ * nsX - ssX * nsZ;
+		float tsZ = ssX * nsY - ssY * nsX;
+		
+		if(vector3FLengthSquared(tsX, tsY, tsZ) > 0.0F) {
+			final float tsLengthReciprocal = vector3FLengthReciprocal(tsX, tsY, tsZ);
+			
+			tsX *= tsLengthReciprocal;
+			tsY *= tsLengthReciprocal;
+			tsZ *= tsLengthReciprocal;
+			
+			ssX = tsY * nsZ - tsZ * nsY;
+			ssY = tsZ * nsX - tsX * nsZ;
+			ssZ = tsX * nsY - tsY * nsX;
+		} else {
+			final float wX = nX;
+			final float wY = nY;
+			final float wZ = nZ;
+			
+			final float uUnnormalizedX = abs(wX) > abs(wY) ? -wZ : 0.0F;
+			final float uUnnormalizedY = abs(wX) > abs(wY) ? 0.0F : wZ;
+			final float uUnnormalizedZ = abs(wX) > abs(wY) ? wX : -wY;
+			final float uLengthReciprocal = vector3FLengthReciprocal(uUnnormalizedX, uUnnormalizedY, uUnnormalizedZ);
+			final float uX = uUnnormalizedX * uLengthReciprocal;
+			final float uY = uUnnormalizedY * uLengthReciprocal;
+			final float uZ = uUnnormalizedZ * uLengthReciprocal;
+			
+			final float vX = wY * uZ - wZ * uY;
+			final float vY = wZ * uX - wX * uZ;
+			final float vZ = wX * uY - wY * uX;
+			
+			ssX = uX;
+			ssY = uY;
+			ssZ = uZ;
+			
+			tsX = vX;
+			tsY = vY;
+			tsZ = vZ;
+		}
+		
+		final float wUnnormalizedX = ssY * tsZ - ssZ * tsY;
+		final float wUnnormalizedY = ssZ * tsX - ssX * tsZ;
+		final float wUnnormalizedZ = ssX * tsY - ssY * tsX;
+		final float wLengthReciprocal = vector3FLengthReciprocal(wUnnormalizedX, wUnnormalizedY, wUnnormalizedZ);
+		final float wX = wUnnormalizedX * wLengthReciprocal;
+		final float wY = wUnnormalizedY * wLengthReciprocal;
+		final float wZ = wUnnormalizedZ * wLengthReciprocal;
+		
+		final boolean isNegating = nsX * wX + nsY * wY + nsZ * wZ < 0.0F;
+		
+		if(isNegating) {
+			nsX = -nsX;
+			nsY = -nsY;
+			nsZ = -nsZ;
+		}
+		
+		orthonormalBasis33FSetFromWVU(nsX, nsY, nsZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		
+		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
+		
+		orthonormalBasis33FSetFromWVU(wX, wY, wZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		
+//		Update the intersection array:
+		intersectionRHSSetOrthonormalBasisSFromOrthonormalBasis33F();
+		intersectionRHSSetPrimitiveIndex(primitiveIndex);
+		intersectionRHSSetSurfaceIntersectionPoint(pHitX, pHitY, pHitZ);
+		intersectionRHSSetTextureCoordinates(uvHitX, uvHitY);
+		
+		/*
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
 		final float edgeABX = triangleBPositionX - triangleAPositionX;
 		final float edgeABY = triangleBPositionY - triangleAPositionY;
@@ -2950,6 +3650,7 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		intersectionRHSSetPrimitiveIndex(primitiveIndex);
 		intersectionRHSSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 		intersectionRHSSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+		*/
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

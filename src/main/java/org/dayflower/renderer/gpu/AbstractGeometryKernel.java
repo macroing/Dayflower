@@ -1454,6 +1454,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = wNormalizedZ;
 	}
 	
+//	TODO: Add Javadocs!
+	protected final void orthonormalBasis33FSetFromWVU(final float wX, final float wY, final float wZ, final float vX, final float vY, final float vZ, final float uX, final float uY, final float uZ) {
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = uX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = uY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = uZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = vX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = vY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = vZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = wX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = wY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = wZ;
+	}
+	
 	/**
 	 * Sets an orthonormal basis in {@link #orthonormalBasis33FArray_$private$9}.
 	 * <p>

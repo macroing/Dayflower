@@ -74,7 +74,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 		if(!result.isBlack() && intersection != null) {
 			final BXDF bXDF = new SeparableBSSRDFBXDF(this);
 			
-			final Vector3F outgoing = intersection.getSurfaceNormalS();
+			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
 			final BSDF bSDF = new BSDF(intersection, bXDF, outgoing);
 			

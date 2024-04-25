@@ -34,6 +34,7 @@ import com.aparapi.Kernel;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractKernel extends Kernel {
+	private static final float MACHINE_EPSILON = 5.9604645E-8F;
 	private static final float PRNG_NEXT_FLOAT_RECIPROCAL = 1.0F / (1 << 24);
 	private static final float SIMPLEX_F2 = 0.3660254037844386F;
 	private static final float SIMPLEX_F3 = 1.0F / 3.0F;
@@ -345,6 +346,12 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final float fractionalPart(final float value, final boolean isUsingCeilOnNegativeValue) {
 		return value < 0.0F && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("static-method")
+	protected final float gamma(final int value) {
+		return (value * MACHINE_EPSILON) / (1.0F - value * MACHINE_EPSILON);
 	}
 	
 	/**

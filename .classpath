@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="lib/apache/bcel-6.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/macroing/org.macroing.art4j.jar"/>
 	<classpathentry kind="lib" path="lib/macroing/org.macroing.java.jar"/>
-	<classpathentry kind="lib" path="lib/macroing/org.macroing.javafx.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX17"/>
 	<classpathentry kind="output" path="bin"/>

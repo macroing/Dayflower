@@ -234,9 +234,10 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 							final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
 							
+							final boolean isResultValid = resultR > 0.0F || resultG > 0.0F || resultB > 0.0F;
 							final boolean isProbabilityDensityFunctionValueValid = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
 							
-							if(isProbabilityDensityFunctionValueValid) {
+							if(isResultValid && isProbabilityDensityFunctionValueValid) {
 								throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
@@ -262,7 +263,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							
 							final float russianRouletteThroughputMaximum = max(russianRouletteThroughputR, russianRouletteThroughputG, russianRouletteThroughputB);
 							
-							if(isProbabilityDensityFunctionValueValid && currentBounce >= minimumBounceRussianRoulette && russianRouletteThroughputMaximum < 1.0F) {
+							if(isResultValid && isProbabilityDensityFunctionValueValid && currentBounce >= minimumBounceRussianRoulette && russianRouletteThroughputMaximum < 1.0F) {
 								final float probability = max(0.05F, 1.0F - russianRouletteThroughputMaximum);
 								final float probabilityReciprocal = 1.0F / (1.0F - probability);
 								
@@ -275,7 +276,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 								}
 							}
 							
-							currentBounce = isProbabilityDensityFunctionValueValid ? currentBounce + 1 : maximumBounce;
+							currentBounce = isResultValid && isProbabilityDensityFunctionValueValid ? currentBounce + 1 : maximumBounce;
 						} else {
 							currentBounce = maximumBounce;
 						}

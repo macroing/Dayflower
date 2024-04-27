@@ -21,8 +21,7 @@ package org.dayflower.javafx.shape;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Triangle3F;
-
-import org.macroing.javafx.scene.control.TextFields;
+import org.dayflower.javafx.scene.control.TextFields;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;

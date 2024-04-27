@@ -174,17 +174,21 @@ The following table describes the different APIs and their current status in the
 
 | Name                                   | Javadoc | Unit Test |
 | -------------------------------------- | ------- | --------- |
-| Dayflower                              | ???.?%  |  15.7%    |
+| Dayflower                              | ???.?%  |  15.4%    |
 | Change API                             | 100.0%  | 100.0%    |
 | Geometry API                           | 100.0%  |  77.8%    |
 | Geometry Bounding Volume API           | 100.0%  | 100.0%    |
 | Geometry Bounding Volume Hierarchy API | 100.0%  |   0.0%    |
 | Geometry Rasterizer API                | 100.0%  |   0.0%    |
-| Geometry Shape API                     | 100.0%  |  17.4%    |
+| Geometry Shape API                     | 100.0%  |  17.1%    |
 | Image API                              | 100.0%  |   0.0%    |
 | Interpolation API                      | ???.?%  |   0.0%    |
+| JavaFX Concurrent API                  | 100.0%  |   0.0%    |
 | JavaFX Material API                    | 100.0%  |   0.0%    |
 | JavaFX Scene Canvas API                | 100.0%  |   0.0%    |
+| JavaFX Scene Control API               | 100.0%  |   0.0%    |
+| JavaFX Scene Image API                 | 100.0%  | 100.0%    |
+| JavaFX Scene Layout API                | 100.0%  |   0.0%    |
 | JavaFX Shape API                       | 100.0%  |   0.0%    |
 | JavaFX Texture API                     | 100.0%  |   0.0%    |
 | Parameter API                          | 100.0%  |   0.0%    |
@@ -214,7 +218,6 @@ Dependencies
  - [Aparapi](https://aparapi.com/)
  - [Apache / Commons / BCEL](https://commons.apache.org/proper/commons-bcel/)
  - [Macroing / Java](https://github.com/macroing/Java)
- - [Macroing / JavaFX](https://github.com/macroing/JavaFX)
  - [Macroing / Art4J](https://github.com/macroing/Art4J)
 
 References

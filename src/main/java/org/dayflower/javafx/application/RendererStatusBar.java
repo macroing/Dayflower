@@ -21,11 +21,10 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 
 import org.dayflower.image.ImageF;
+import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
-
-import org.macroing.javafx.scene.layout.Regions;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

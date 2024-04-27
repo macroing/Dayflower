@@ -38,6 +38,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.javafx.material.MaterialPicker;
+import org.dayflower.javafx.scene.layout.CenteredVBox;
 import org.dayflower.javafx.shape.ShapePicker;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
@@ -52,8 +53,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-
-import org.macroing.javafx.scene.layout.CenteredVBox;
 
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;

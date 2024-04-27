@@ -919,11 +919,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * @param incomingX the X-component of the incoming direction in world space
 	 * @param incomingY the Y-component of the incoming direction in world space
 	 * @param incomingZ the Z-component of the incoming direction in world space
-	 * @param rayDirectionX the X-component of the ray direction
-	 * @param rayDirectionY the Y-component of the ray direction
-	 * @param rayDirectionZ the Z-component of the ray direction
 	 */
-	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ, final float rayDirectionX, final float rayDirectionY, final float rayDirectionZ) {
+	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
 		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
 		doBXDFResultSetIncomingTransformedFromBSDFResult();
 		

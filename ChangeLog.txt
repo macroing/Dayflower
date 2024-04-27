@@ -1,3 +1,8 @@
+2024-04-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the JavaFX Concurrent, JavaFX Scene Control, JavaFX Scene Image and JavaFX Scene Layout APIs from the library Macroing JavaFX.
+	* REMOVE:	Remove the dependency to the library Macroing JavaFX.
+
 2024-04-25  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Update the triangle intersection and computation algorithms in the GPU-renderer.

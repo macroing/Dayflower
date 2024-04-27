@@ -2713,9 +2713,9 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		
 		float tScaled = e0 * p0T3Z + e1 * p1T3Z + e2 * p2T3Z;
 		
-		if(det < 0.0F && (tScaled >= 0.0F || tScaled < rayTMaximum * det)) {
+		if(det < 0.0F && (tScaled >= rayTMinimum || tScaled < rayTMaximum * det)) {
 			return 0.0F;
-		} else if(det > 0.0F && (tScaled <= 0.0F || tScaled > rayTMaximum * det)) {
+		} else if(det > 0.0F && (tScaled <= rayTMinimum || tScaled > rayTMaximum * det)) {
 			return 0.0F;
 		}
 		

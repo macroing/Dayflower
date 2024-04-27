@@ -1418,8 +1418,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 //			Initialize a flag that indicates whether the result is valid or not:
 			final boolean hasLightResult = lightResultR > 0.0F || lightResultG > 0.0F || lightResultB > 0.0F;
 			
-			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
-				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+			if(hasLightResult && checkIsFinite(lightProbabilityDensityFunctionValue) && lightProbabilityDensityFunctionValue > 0.0F) {
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 				
 				final float materialBSDFResultR = materialBSDFResultGetResultR();
 				final float materialBSDFResultG = materialBSDFResultGetResultG();
@@ -1483,7 +1483,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final boolean hasLightResult = checkIsFinite(lightResultR) && checkIsFinite(lightResultG) && checkIsFinite(lightResultB) && (lightResultR > 0.0F || lightResultG > 0.0F || lightResultB > 0.0F);
 			
 			if(hasLightResult && checkIsFinite(lightProbabilityDensityFunctionValue) && lightProbabilityDensityFunctionValue > 0.0F) {
-				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 				
 				final float materialBSDFResultR = materialBSDFResultGetResultR();
 				final float materialBSDFResultG = materialBSDFResultGetResultG();

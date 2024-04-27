@@ -20,12 +20,12 @@ package org.dayflower.javafx.material;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Vector2F;
+import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.material.CheckerboardMaterial;
 import org.dayflower.scene.material.MatteMaterial;
 
 import org.macroing.art4j.color.Color3F;
-import org.macroing.javafx.scene.control.TextFields;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;

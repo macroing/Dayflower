@@ -471,7 +471,7 @@ public final class Scene implements Node {
 				final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 				
 				if(currentBounce == 0 || isSpecularBounce) {
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(outgoing)));
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, intersection.evaluateRadianceEmitted(outgoing)));
 				}
 				
 				if(currentBounce >= maximumBounce) {

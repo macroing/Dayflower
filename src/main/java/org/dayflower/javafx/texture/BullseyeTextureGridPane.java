@@ -19,12 +19,12 @@
 package org.dayflower.javafx.texture;
 
 import org.dayflower.geometry.Point3F;
+import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 import org.macroing.art4j.color.Color3F;
-import org.macroing.javafx.scene.control.TextFields;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;

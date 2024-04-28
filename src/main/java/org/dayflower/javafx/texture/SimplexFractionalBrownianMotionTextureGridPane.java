@@ -18,11 +18,10 @@
  */
 package org.dayflower.javafx.texture;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.Texture;
-
-import org.macroing.art4j.color.Color3F;
 
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;

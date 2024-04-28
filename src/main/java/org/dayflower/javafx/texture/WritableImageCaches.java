@@ -20,6 +20,9 @@ package org.dayflower.javafx.texture;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.filter.BoxFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
@@ -43,10 +46,6 @@ import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.texture.Texture;
-
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.Color4F;
-import org.macroing.art4j.filter.BoxFilter2F;
 
 import javafx.scene.image.WritableImage;
 

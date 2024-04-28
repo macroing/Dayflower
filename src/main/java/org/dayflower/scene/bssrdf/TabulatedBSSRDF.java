@@ -21,11 +21,11 @@ package org.dayflower.scene.bssrdf;
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.interpolation.Interpolation;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 
 /**

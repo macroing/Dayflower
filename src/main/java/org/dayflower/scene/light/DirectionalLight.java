@@ -24,6 +24,7 @@ import static org.dayflower.utility.Floats.equal;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
@@ -31,8 +32,6 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
-
-import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code DirectionalLight} is an implementation of {@link Light} that represents a directional light.

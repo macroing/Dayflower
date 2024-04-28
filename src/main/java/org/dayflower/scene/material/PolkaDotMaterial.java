@@ -25,13 +25,13 @@ import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.ScatteringFunctions;
 import org.dayflower.scene.TransportMode;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 import org.macroing.java.util.visitor.NodeTraversalException;
 

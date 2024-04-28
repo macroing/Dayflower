@@ -1,3 +1,8 @@
+2024-04-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the Color, Curve, Filter and Noise APIs from the library Art4J.
+	* REMOVE:	Remove the dependency to the library Art4J.
+
 2024-04-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the JavaFX Concurrent, JavaFX Scene Control, JavaFX Scene Image and JavaFX Scene Layout APIs from the library Macroing JavaFX.

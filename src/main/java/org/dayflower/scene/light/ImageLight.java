@@ -28,6 +28,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -47,7 +48,6 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 import org.macroing.java.util.visitor.NodeTraversalException;
 

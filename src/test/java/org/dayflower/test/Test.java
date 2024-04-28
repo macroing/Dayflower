@@ -18,6 +18,9 @@
  */
 package org.dayflower.test;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
@@ -35,10 +38,6 @@ import org.dayflower.image.ImageF;
 import org.dayflower.image.IntImageF;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
-
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.Color4F;
-import org.macroing.art4j.color.ColorSpaceF;
 
 public final class Test {
 	private static final ImageF IMAGE_ORIGINAL = IntImageF.load("./generated/Test/Image-Original.jpg");

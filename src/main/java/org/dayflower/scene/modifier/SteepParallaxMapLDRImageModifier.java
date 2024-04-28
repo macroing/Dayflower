@@ -21,6 +21,7 @@ package org.dayflower.scene.modifier;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -30,7 +31,6 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.scene.Intersection;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 import org.macroing.java.util.visitor.NodeTraversalException;
 

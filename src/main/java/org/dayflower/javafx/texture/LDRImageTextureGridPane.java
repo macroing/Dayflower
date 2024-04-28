@@ -21,6 +21,7 @@ package org.dayflower.javafx.texture;
 import java.io.File;
 import java.io.UncheckedIOException;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.ImageF;
@@ -28,8 +29,6 @@ import org.dayflower.image.IntImageF;
 import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.Texture;
-
-import org.macroing.art4j.color.Color3F;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;

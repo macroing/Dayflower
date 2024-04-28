@@ -18,13 +18,13 @@
  */
 package org.dayflower.javafx.material;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.javafx.texture.TexturePicker;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Doubles;
 
 import javafx.scene.control.Button;

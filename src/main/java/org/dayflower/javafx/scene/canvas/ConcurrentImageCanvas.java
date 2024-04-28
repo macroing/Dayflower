@@ -27,9 +27,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
+import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.concurrent.PredicateTask;
-import org.macroing.art4j.color.ArrayComponentOrder;
+
 import org.macroing.java.util.function.TriFunction;
 
 import javafx.scene.canvas.Canvas;

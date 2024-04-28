@@ -38,15 +38,16 @@ import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
+import org.dayflower.color.PackedIntComponentOrder;
+import org.dayflower.filter.Filter2F;
+import org.dayflower.filter.GaussianFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.ParameterArguments;
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.Color4F;
-import org.macroing.art4j.color.ColorSpaceF;
-import org.macroing.art4j.color.PackedIntComponentOrder;
-import org.macroing.art4j.filter.Filter2F;
-import org.macroing.art4j.filter.GaussianFilter2F;
+
 import org.macroing.java.awt.image.BufferedImages;
 import org.macroing.java.lang.Floats;
 

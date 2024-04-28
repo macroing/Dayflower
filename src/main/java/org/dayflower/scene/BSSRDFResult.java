@@ -22,9 +22,8 @@ import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.Vector3F;
+import org.dayflower.color.Color3F;
 import org.dayflower.utility.Floats;
-import org.macroing.art4j.color.Color3F;
 
 //TODO: Add Javadocs!
 public final class BSSRDFResult {

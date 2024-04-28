@@ -18,13 +18,12 @@
  */
 package org.dayflower.javafx.material;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.javafx.scene.control.TextFields;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.PolkaDotMaterial;
-
-import org.macroing.art4j.color.Color3F;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;

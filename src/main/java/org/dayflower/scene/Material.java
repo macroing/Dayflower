@@ -18,7 +18,8 @@
  */
 package org.dayflower.scene;
 
-import org.macroing.art4j.color.Color3F;
+import org.dayflower.color.Color3F;
+
 import org.macroing.java.util.visitor.Node;
 
 /**

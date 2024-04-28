@@ -21,15 +21,15 @@ package org.dayflower.javafx.application;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.IntImageF;
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.Color4F;
-import org.macroing.art4j.color.ColorSpaceF;
-import org.macroing.art4j.noise.SimplexNoiseF;
+import org.dayflower.noise.SimplexNoiseF;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

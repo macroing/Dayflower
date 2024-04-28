@@ -23,6 +23,7 @@ import static org.dayflower.utility.Floats.random;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.Intersection;
@@ -38,7 +39,6 @@ import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 import org.macroing.java.util.visitor.NodeTraversalException;
 

@@ -18,10 +18,9 @@
  */
 package org.dayflower.javafx.texture;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
-
-import org.macroing.art4j.color.Color3F;
 
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;

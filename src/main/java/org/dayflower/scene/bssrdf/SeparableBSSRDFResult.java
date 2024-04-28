@@ -21,10 +21,9 @@ package org.dayflower.scene.bssrdf;
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.utility.Floats;
-
-import org.macroing.art4j.color.Color3F;
 
 //TODO: Add Javadocs!
 public final class SeparableBSSRDFResult {

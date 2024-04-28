@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.texture;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.scene.Intersection;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.Node;
 
 /**

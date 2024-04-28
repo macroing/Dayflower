@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
@@ -48,7 +49,6 @@ import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Strings;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;

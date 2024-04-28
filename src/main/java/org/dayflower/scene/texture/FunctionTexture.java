@@ -21,10 +21,9 @@ package org.dayflower.scene.texture;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.scene.Intersection;
-
-import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code FunctionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by applying an {@link Intersection} instance to a {@code Function} instance.

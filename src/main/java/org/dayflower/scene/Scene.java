@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -43,7 +44,6 @@ import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.utility.ParameterArguments;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 import org.macroing.java.util.Randoms;
 import org.macroing.java.util.visitor.Node;

@@ -24,6 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
@@ -36,8 +38,6 @@ import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.ParameterArguments;
 
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.ColorSpaceF;
 import org.macroing.java.util.Timer;
 
 /**

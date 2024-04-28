@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
@@ -36,8 +37,6 @@ import org.dayflower.scene.TransportMode;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
-
-import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code FourierBXDF} is an implementation of {@link BXDF} that represents a BRDF and a BTDF for glossy reflection and transmission.

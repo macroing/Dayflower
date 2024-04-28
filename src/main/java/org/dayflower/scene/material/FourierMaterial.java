@@ -20,6 +20,7 @@ package org.dayflower.scene.material;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
@@ -30,7 +31,6 @@ import org.dayflower.scene.bxdf.FourierBXDFTable;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.texture.Texture;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.util.visitor.NodeHierarchicalVisitor;
 import org.macroing.java.util.visitor.NodeTraversalException;
 

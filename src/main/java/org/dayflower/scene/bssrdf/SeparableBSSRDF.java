@@ -22,6 +22,7 @@ import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -36,7 +37,6 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 
-import org.macroing.art4j.color.Color3F;
 import org.macroing.java.lang.Floats;
 import org.macroing.java.lang.Ints;
 

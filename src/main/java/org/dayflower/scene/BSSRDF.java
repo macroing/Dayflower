@@ -21,10 +21,9 @@ package org.dayflower.scene;
 import java.lang.reflect.Field;//TODO: Add Javadocs!
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
-
-import org.macroing.art4j.color.Color3F;
 
 /**
  * A {@code BSSRDF} represents a BSSRDF (Bidirectional Scattering Surface Reflectance Distribution Function).

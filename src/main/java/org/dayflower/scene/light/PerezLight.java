@@ -32,6 +32,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.ColorSpaceF;
+import org.dayflower.curve.ChromaticSpectralCurveF;
+import org.dayflower.curve.IrregularSpectralCurveF;
+import org.dayflower.curve.RegularSpectralCurveF;
+import org.dayflower.curve.SpectralCurveF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -48,12 +54,6 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
 
-import org.macroing.art4j.color.Color3F;
-import org.macroing.art4j.color.ColorSpaceF;
-import org.macroing.art4j.curve.ChromaticSpectralCurveF;
-import org.macroing.art4j.curve.IrregularSpectralCurveF;
-import org.macroing.art4j.curve.RegularSpectralCurveF;
-import org.macroing.art4j.curve.SpectralCurveF;
 import org.macroing.java.lang.Doubles;
 
 /**

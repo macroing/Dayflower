@@ -21,6 +21,7 @@ package org.dayflower.scene;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -28,8 +29,6 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
-
-import org.macroing.art4j.color.Color3F;
 
 /**
  * An {@code Intersection} denotes an intersection between a {@link Ray3F} instance and a {@link Primitive} instance.

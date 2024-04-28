@@ -62,7 +62,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	
 //	TODO: Add Javadocs!
 	@Override
-	public BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2) {
+	public final BSSRDFResult sampleS(final Scene scene, final float u1, final Point2F u2) {
 		final SeparableBSSRDFResult separableBSSRDFResult = sampleSP(scene, u1, u2);
 		
 		final Color3F result = separableBSSRDFResult.getResult();
@@ -74,7 +74,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 		if(!result.isBlack() && intersection != null) {
 			final BXDF bXDF = new SeparableBSSRDFBXDF(this);
 			
-			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
+			final Vector3F outgoing = intersection.getSurfaceNormalS();
 			
 			final BSDF bSDF = new BSDF(intersection, bXDF, outgoing);
 			
@@ -98,6 +98,9 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	}
 	
 //	TODO: Add Javadocs!
+	public abstract Color3F evaluateSR(final float distance);
+	
+//	TODO: Add Javadocs!
 	public final Color3F evaluateSW(final Vector3F incoming) {
 		final float c = 1.0F - 2.0F * Utilities.computeFresnelMoment1(1.0F / getEta());
 		
@@ -105,10 +108,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	}
 	
 //	TODO: Add Javadocs!
-	public abstract Color3F evaluateSR(final float distance);
-	
-//	TODO: Add Javadocs!
-	public SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2) {
+	public final SeparableBSSRDFResult sampleSP(final Scene scene, final float u1, final Point2F u2) {
 		final OrthonormalBasis33F orthonormalBasis = getIntersection().getOrthonormalBasisS();
 		
 		final Vector3F u = orthonormalBasis.u;
@@ -181,7 +181,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 		
 		final Vector3F zero = new Vector3F(0.0F, 0.0F, 0.0F);
 		
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 5; i++) {
 			final Ray3F ray = intersection == null ? new Ray3F(p1, Vector3F.directionNormalized(p1, p2)) : intersection.createRay(p2);
 			
 			if(ray.getDirection().equals(zero)) {
@@ -196,11 +196,10 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 			
 			intersection = optionalIntersection.get();
 			
-			intersectionChain.setIntersection(intersection);
-			
 			if(intersection.getPrimitive() == getIntersection().getPrimitive()) {
 				final IntersectionChain newIntersectionChain = new IntersectionChain();
 				
+				intersectionChain.setIntersection(intersection);
 				intersectionChain.setIntersectionChain(newIntersectionChain);
 				
 				intersectionChain = newIntersectionChain;
@@ -234,7 +233,7 @@ public abstract class SeparableBSSRDF extends BSSRDF {
 	}
 	
 //	TODO: Add Javadocs!
-	public float evaluateProbabilityDensityFunctionSP(final Intersection intersection) {
+	public final float evaluateProbabilityDensityFunctionSP(final Intersection intersection) {
 		final OrthonormalBasis33F orthonormalBasis = getIntersection().getOrthonormalBasisS();
 		
 		final Vector3F d = Vector3F.direction(intersection.getSurfaceIntersectionPoint(), getIntersection().getSurfaceIntersectionPoint());

@@ -5356,7 +5356,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			final float tanTheta = sinTheta / cosTheta;
 			
-			final float a = 2.0F / (1.0F + sqrt(1.0F + tanTheta * tanTheta));
+			final float a = 2.0F / (1.0F + sqrt(1.0F + (1.0F / tanTheta) * (1.0F / tanTheta)));
 			final float b = 2.0F * u / a - 1.0F;
 			final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
 			final float d = tanTheta;
@@ -5404,9 +5404,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float sampleX = -((cosPhi * slopeX - sinPhi * slopeY) * alphaX);
 		final float sampleY = -((sinPhi * slopeX + cosPhi * slopeY) * alphaY);
 		final float sampleZ = 1.0F;
-		final float sampleCorrectlyOrientedX = isNegating ? -sampleX : sampleX;
-		final float sampleCorrectlyOrientedY = isNegating ? -sampleY : sampleY;
-		final float sampleCorrectlyOrientedZ = isNegating ? -sampleZ : sampleZ;
+		final float sampleLengthReciprocal = vector3FLengthReciprocal(sampleX, sampleY, sampleZ);
+		final float sampleNormalizedX = sampleX * sampleLengthReciprocal;
+		final float sampleNormalizedY = sampleY * sampleLengthReciprocal;
+		final float sampleNormalizedZ = sampleZ * sampleLengthReciprocal;
+		final float sampleCorrectlyOrientedX = isNegating ? -sampleNormalizedX : sampleNormalizedX;
+		final float sampleCorrectlyOrientedY = isNegating ? -sampleNormalizedY : sampleNormalizedY;
+		final float sampleCorrectlyOrientedZ = isNegating ? -sampleNormalizedZ : sampleNormalizedZ;
 		
 		vector3FSetNormalize(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
 	}

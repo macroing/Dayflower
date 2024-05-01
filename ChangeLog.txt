@@ -1,3 +1,7 @@
+2024-05-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix bugs in the Trowbridge Reitz microfacet distribution implementations.
+
 2024-04-28  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the Color, Curve, Filter and Noise APIs from the library Art4J.

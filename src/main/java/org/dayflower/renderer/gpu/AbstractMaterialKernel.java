@@ -4301,9 +4301,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalNormalizedX = normalX * normalLengthReciprocal;
 		final float normalNormalizedY = normalY * normalLengthReciprocal;
 		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
-		final float normalCorrectlyOrientedX = normalNormalizedZ < 0.0F ? -normalNormalizedX : normalNormalizedX;
-		final float normalCorrectlyOrientedY = normalNormalizedZ < 0.0F ? -normalNormalizedY : normalNormalizedY;
-		final float normalCorrectlyOrientedZ = normalNormalizedZ < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
+		
+		final float dotProduct = vector3FDotProduct(normalNormalizedX, normalNormalizedY, normalNormalizedZ, 0.0F, 0.0F, 1.0F);
+		
+		final float normalCorrectlyOrientedX = dotProduct < 0.0F ? -normalNormalizedX : normalNormalizedX;
+		final float normalCorrectlyOrientedY = dotProduct < 0.0F ? -normalNormalizedY : normalNormalizedY;
+		final float normalCorrectlyOrientedZ = dotProduct < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
 		
 		doBXDFTorranceSparrowBRDFFresnelConductorInitializeMicrofacetDistributionTrowbridgeReitz();
 		doBXDFTorranceSparrowBRDFFresnelConductorEvaluateFresnel(vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
@@ -4518,9 +4521,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalNormalizedX = normalX * normalLengthReciprocal;
 		final float normalNormalizedY = normalY * normalLengthReciprocal;
 		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
-		final float normalCorrectlyOrientedX = normalNormalizedZ < 0.0F ? -normalNormalizedX : normalNormalizedX;
-		final float normalCorrectlyOrientedY = normalNormalizedZ < 0.0F ? -normalNormalizedY : normalNormalizedY;
-		final float normalCorrectlyOrientedZ = normalNormalizedZ < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
+		
+		final float dotProduct = vector3FDotProduct(normalNormalizedX, normalNormalizedY, normalNormalizedZ, 0.0F, 0.0F, 1.0F);
+		
+		final float normalCorrectlyOrientedX = dotProduct < 0.0F ? -normalNormalizedX : normalNormalizedX;
+		final float normalCorrectlyOrientedY = dotProduct < 0.0F ? -normalNormalizedY : normalNormalizedY;
+		final float normalCorrectlyOrientedZ = dotProduct < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
 		
 		doBXDFTorranceSparrowBRDFFresnelDielectricInitializeMicrofacetDistributionTrowbridgeReitz();
 		doBXDFTorranceSparrowBRDFFresnelDielectricEvaluateFresnel(vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
@@ -4732,9 +4738,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalNormalizedX = normalX * normalLengthReciprocal;
 		final float normalNormalizedY = normalY * normalLengthReciprocal;
 		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
-		final float normalCorrectlyOrientedX = normalNormalizedZ < 0.0F ? -normalNormalizedX : normalNormalizedX;
-		final float normalCorrectlyOrientedY = normalNormalizedZ < 0.0F ? -normalNormalizedY : normalNormalizedY;
-		final float normalCorrectlyOrientedZ = normalNormalizedZ < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
+		
+		final float dotProduct = vector3FDotProduct(normalNormalizedX, normalNormalizedY, normalNormalizedZ, 0.0F, 0.0F, 1.0F);
+		
+		final float normalCorrectlyOrientedX = dotProduct < 0.0F ? -normalNormalizedX : normalNormalizedX;
+		final float normalCorrectlyOrientedY = dotProduct < 0.0F ? -normalNormalizedY : normalNormalizedY;
+		final float normalCorrectlyOrientedZ = dotProduct < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
 		
 		doBXDFTorranceSparrowBRDFFresnelDisneyInitializeMicrofacetDistributionTrowbridgeReitz();
 		doBXDFTorranceSparrowBRDFFresnelDisneyEvaluateFresnel(vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ));
@@ -5356,7 +5365,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			final float tanTheta = sinTheta / cosTheta;
 			
-			final float a = 2.0F / (1.0F + sqrt(1.0F + (1.0F / tanTheta) * (1.0F / tanTheta)));
+			final float a = 2.0F / (1.0F + sqrt(1.0F + 1.0F / ((1.0F / tanTheta) * (1.0F / tanTheta))));
 			final float b = 2.0F * u / a - 1.0F;
 			final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
 			final float d = tanTheta;
@@ -5412,7 +5421,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float sampleCorrectlyOrientedY = isNegating ? -sampleNormalizedY : sampleNormalizedY;
 		final float sampleCorrectlyOrientedZ = isNegating ? -sampleNormalizedZ : sampleNormalizedZ;
 		
-		vector3FSetNormalize(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
+		vector3FSet(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
 	}
 	
 	private void doMicrofacetDistributionTrowbridgeReitzSet(final boolean isSeparableModel, final float alphaX, final float alphaY) {

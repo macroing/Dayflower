@@ -3033,9 +3033,10 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float nUnnormalizedY = dp02Z * dp12X - dp02X * dp12Z;
 		final float nUnnormalizedZ = dp02X * dp12Y - dp02Y * dp12X;
 		final float nLengthReciprocal = vector3FLengthReciprocal(nUnnormalizedX, nUnnormalizedY, nUnnormalizedZ);
-		final float nX = nUnnormalizedX * nLengthReciprocal;
-		final float nY = nUnnormalizedY * nLengthReciprocal;
-		final float nZ = nUnnormalizedZ * nLengthReciprocal;
+		
+		float nX = nUnnormalizedX * nLengthReciprocal;
+		float nY = nUnnormalizedY * nLengthReciprocal;
+		float nZ = nUnnormalizedZ * nLengthReciprocal;
 		
 		float nsX = b0 * triangleAOrthonormalBasisWX + b1 * triangleBOrthonormalBasisWX + b2 * triangleCOrthonormalBasisWX;
 		float nsY = b0 * triangleAOrthonormalBasisWY + b1 * triangleBOrthonormalBasisWY + b2 * triangleCOrthonormalBasisWY;
@@ -3107,15 +3108,15 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float wY = wUnnormalizedY * wLengthReciprocal;
 		final float wZ = wUnnormalizedZ * wLengthReciprocal;
 		
-		final boolean isNegating = nsX * wX + nsY * wY + nsZ * wZ < 0.0F;
+		final boolean isNegating = nX * wX + nY * wY + nZ * wZ < 0.0F;
 		
 		if(isNegating) {
-			nsX = -nsX;
-			nsY = -nsY;
-			nsZ = -nsZ;
+			nX = -nX;
+			nY = -nY;
+			nZ = -nZ;
 		}
 		
-		orthonormalBasis33FSetFromWVU(nsX, nsY, nsZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		orthonormalBasis33FSetFromWVU(nX, nY, nZ, dp12X, dp12Y, dp12Z, dp02X, dp02Y, dp02Z);
 		
 		intersectionLHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		
@@ -3460,9 +3461,10 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float nUnnormalizedY = dp02Z * dp12X - dp02X * dp12Z;
 		final float nUnnormalizedZ = dp02X * dp12Y - dp02Y * dp12X;
 		final float nLengthReciprocal = vector3FLengthReciprocal(nUnnormalizedX, nUnnormalizedY, nUnnormalizedZ);
-		final float nX = nUnnormalizedX * nLengthReciprocal;
-		final float nY = nUnnormalizedY * nLengthReciprocal;
-		final float nZ = nUnnormalizedZ * nLengthReciprocal;
+		
+		float nX = nUnnormalizedX * nLengthReciprocal;
+		float nY = nUnnormalizedY * nLengthReciprocal;
+		float nZ = nUnnormalizedZ * nLengthReciprocal;
 		
 		float nsX = b0 * triangleAOrthonormalBasisWX + b1 * triangleBOrthonormalBasisWX + b2 * triangleCOrthonormalBasisWX;
 		float nsY = b0 * triangleAOrthonormalBasisWY + b1 * triangleBOrthonormalBasisWY + b2 * triangleCOrthonormalBasisWY;
@@ -3534,15 +3536,15 @@ public abstract class AbstractShape3FKernel extends AbstractBoundingVolume3FKern
 		final float wY = wUnnormalizedY * wLengthReciprocal;
 		final float wZ = wUnnormalizedZ * wLengthReciprocal;
 		
-		final boolean isNegating = nsX * wX + nsY * wY + nsZ * wZ < 0.0F;
+		final boolean isNegating = nX * wX + nY * wY + nZ * wZ < 0.0F;
 		
 		if(isNegating) {
-			nsX = -nsX;
-			nsY = -nsY;
-			nsZ = -nsZ;
+			nX = -nX;
+			nY = -nY;
+			nZ = -nZ;
 		}
 		
-		orthonormalBasis33FSetFromWVU(nsX, nsY, nsZ, tsX, tsY, tsZ, ssX, ssY, ssZ);
+		orthonormalBasis33FSetFromWVU(nX, nY, nZ, dp12X, dp12Y, dp12Z, dp02X, dp02Y, dp02Z);
 		
 		intersectionRHSSetOrthonormalBasisGFromOrthonormalBasis33F();
 		

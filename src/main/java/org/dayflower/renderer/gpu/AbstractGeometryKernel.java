@@ -2049,14 +2049,14 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float refractionDirectionX = -directionX * eta + normalX * (eta * cosThetaI - cosThetaT);
 		final float refractionDirectionY = -directionY * eta + normalY * (eta * cosThetaI - cosThetaT);
 		final float refractionDirectionZ = -directionZ * eta + normalZ * (eta * cosThetaI - cosThetaT);
-		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
-		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
-		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
-		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
+//		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
+//		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
+//		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
+//		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = refractionDirectionNormalizedX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = refractionDirectionNormalizedY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = refractionDirectionNormalizedZ;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_X] = refractionDirectionX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Y] = refractionDirectionY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_Z] = refractionDirectionZ;
 		
 		return true;
 	}

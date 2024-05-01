@@ -248,7 +248,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float tanTheta = sinTheta / cosTheta;
 		
-		final float a = 2.0F / (1.0F + sqrt(1.0F + (1.0F / tanTheta) * (1.0F / tanTheta)));
+		final float a = 2.0F / (1.0F + sqrt(1.0F + 1.0F / ((1.0F / tanTheta) * (1.0F / tanTheta))));
 		final float b = 2.0F * u / a - 1.0F;
 		final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
 		final float d = tanTheta;

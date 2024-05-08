@@ -1,3 +1,7 @@
+2024-05-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix bugs in the Disney material in the GPU-renderer.
+
 2024-05-01  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix bugs in the Trowbridge Reitz microfacet distribution implementations.

@@ -1372,9 +1372,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			if(floatSheen > 0.0F) {
 				final float floatSheenTint = textureEvaluateFloat((textureSheenTintAndTextureSpecularTint >> 0) & 0xFF, (textureSheenTintAndTextureSpecularTint >> 8) & 0xFF, rayDirectionX, rayDirectionY, rayDirectionZ);
 				
-				final float colorSheenR = 1.0F - floatSheenTint + floatSheenTint * colorTintR;
-				final float colorSheenG = 1.0F - floatSheenTint + floatSheenTint * colorTintG;
-				final float colorSheenB = 1.0F - floatSheenTint + floatSheenTint * colorTintB;
+				final float colorSheenR = lerp(1.0F, colorTintR, floatSheenTint);
+				final float colorSheenG = lerp(1.0F, colorTintG, floatSheenTint);
+				final float colorSheenB = lerp(1.0F, colorTintB, floatSheenTint);
 				
 //				Set DisneySheenBRDF:
 				doBSDFSetBXDFDisneySheenBRDF(index++);
@@ -1389,9 +1389,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float floatR0 = ((floatEta - 1.0F) * (floatEta - 1.0F)) / ((floatEta + 1.0F) * (floatEta + 1.0F));
 		
-		final float colorSpecularR0R = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintR) * floatR0, colorColorR, floatMetallic);
-		final float colorSpecularR0G = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintG) * floatR0, colorColorG, floatMetallic);
-		final float colorSpecularR0B = lerp((1.0F - floatSpecularTint + floatSpecularTint * colorTintB) * floatR0, colorColorB, floatMetallic);
+		final float colorSpecularR0R = lerp(lerp(1.0F, colorTintR, floatSpecularTint) * floatR0, colorColorR, floatMetallic);
+		final float colorSpecularR0G = lerp(lerp(1.0F, colorTintG, floatSpecularTint) * floatR0, colorColorG, floatMetallic);
+		final float colorSpecularR0B = lerp(lerp(1.0F, colorTintB, floatSpecularTint) * floatR0, colorColorB, floatMetallic);
 		
 //		Set TorranceSparrowBRDF:
 		doBSDFSetBXDFTorranceSparrowBRDFFresnelDisney(index++);

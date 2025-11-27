@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 - 2024 J&#246;rgen Lundgren
+ * Copyright 2014 - 2025 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -32,6 +32,7 @@ import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.light.PerezLight;
+import org.dayflower.scene.loader.ImageSceneLoader;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
 import org.macroing.java.io.Files;
@@ -253,7 +254,12 @@ public final class DayflowerApplication extends Application {
 	}
 	
 	private void doOpen(final boolean isUsingGPU, final File file) {
-		final SceneLoader sceneLoader = new JavaSceneLoader();
+		final String name = file.getName();
+		final String nameToLowerCase = name.toLowerCase();
+		
+		final boolean isImageFile = nameToLowerCase.endsWith(".bmp") || nameToLowerCase.endsWith(".jpeg") || nameToLowerCase.endsWith(".jpg") || nameToLowerCase.endsWith(".png");
+		
+		final SceneLoader sceneLoader = isImageFile ? new ImageSceneLoader() : new JavaSceneLoader();
 		
 		final Scene scene = sceneLoader.load(file, new Scene(), new ParameterList(new ParameterLoaderImpl(doGetStage())));
 		

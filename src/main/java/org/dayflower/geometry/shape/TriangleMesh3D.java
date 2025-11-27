@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 - 2024 J&#246;rgen Lundgren
+ * Copyright 2014 - 2025 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
@@ -818,6 +819,204 @@ public final class TriangleMesh3D implements Shape3D {
 	}
 	
 	/**
+	 * Reads a Wavefront Object string into a {@code List} of {@code TriangleMesh3D} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
+	 * <p>
+	 * If {@code string} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param string a {@code String} instance with the content to read
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3D} instances
+	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
+	 * @throws NullPointerException thrown if, and only if, {@code string} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+//	TODO: Add Unit Tests!
+	public static List<TriangleMesh3D> readWavefrontObjectFromString(final String string, final boolean isFlippingTextureCoordinateY, final double scale, final boolean isUsingAccelerationStructure) {
+		try {
+			System.out.println("Loading triangle meshes from from a string...");
+			
+			final DefaultObjectModel defaultObjectModel = DefaultObjectModel.parseDefaultObjectModel(Objects.requireNonNull(string, "string == null"), isFlippingTextureCoordinateY);
+			
+			final IndexedObjectModel indexedObjectModel = defaultObjectModel.toIndexedObjectModel();
+			
+			final List<Integer> indices = indexedObjectModel.getIndices();
+			final List<Point2D> textureCoordinates = indexedObjectModel.getTextureCoordinates();
+			final List<Point4D> positions = indexedObjectModel.getPositions();
+			final List<String> groupNames = indexedObjectModel.getGroupNames();
+			final List<String> materialNames = indexedObjectModel.getMaterialNames();
+			final List<String> objectNames = indexedObjectModel.getObjectNames();
+			final List<Vector3D> normals = indexedObjectModel.getNormals();
+//			final List<Vector3D> tangents = indexedObjectModel.getTangents();
+			final List<Triangle3D> triangles = new ArrayList<>();
+			final List<TriangleMesh3D> triangleMeshes = new ArrayList<>();
+			
+			String previousGroupName = "";
+			String previousMaterialName = "";
+			String previousObjectName = "";
+			
+			final boolean isScaling = !Doubles.equals(scale, 1.0D);
+			
+			final int maximumCount = Integer.MAX_VALUE;
+			
+			final Matrix44D matrix = isScaling ? Matrix44D.scale(scale) : null;
+			
+			if(matrix != null && !matrix.isInvertible()) {
+				return new ArrayList<>();
+			}
+			
+			final Matrix44D matrixInverse = isScaling ? Matrix44D.inverse(matrix) : null;
+			
+			for(int i = 0, j = 0; i < indices.size(); i += 3) {
+				final int indexA = indices.get(i + 0).intValue();
+				final int indexB = indices.get(i + 1).intValue();
+				final int indexC = indices.get(i + 2).intValue();
+				
+				final String currentGroupName = groupNames.get(indexA);
+				final String currentMaterialName = materialNames.get(indexA);
+				final String currentObjectName = objectNames.get(indexA);
+				
+				if(!previousGroupName.equals(currentGroupName) || !previousMaterialName.equals(currentMaterialName)) {
+					if(triangles.size() > 0) {
+						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+						
+						triangleMeshes.add(new TriangleMesh3D(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+						triangles.clear();
+						
+						if(++j >= maximumCount) {
+							break;
+						}
+					}
+					
+					if(!previousGroupName.equals(currentGroupName)) {
+						previousGroupName = currentGroupName;
+					}
+					
+					if(!previousMaterialName.equals(currentMaterialName)) {
+						previousMaterialName = currentMaterialName;
+					}
+				}
+				
+				if(!previousObjectName.equals(currentObjectName)) {
+					previousObjectName = currentObjectName;
+				}
+				
+				final Point2D textureCoordinatesA = textureCoordinates.get(indexA);
+				final Point2D textureCoordinatesB = textureCoordinates.get(indexB);
+				final Point2D textureCoordinatesC = textureCoordinates.get(indexC);
+				
+				final Point4D positionA = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
+				final Point4D positionB = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
+				final Point4D positionC = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
+				
+				final Vector3D normalA = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
+				final Vector3D normalB = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
+				final Vector3D normalC = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
+				
+//				final Vector3D tangentA = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+//				final Vector3D tangentB = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+//				final Vector3D tangentC = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
+				
+				final Vertex3D a = new Vertex3D(textureCoordinatesA, positionA, normalA);
+				final Vertex3D b = new Vertex3D(textureCoordinatesB, positionB, normalB);
+				final Vertex3D c = new Vertex3D(textureCoordinatesC, positionC, normalC);
+				
+				final Triangle3D triangle = new Triangle3D(a, b, c);
+				
+				triangles.add(triangle);
+			}
+			
+			if(triangles.size() > 0) {
+				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+				
+				triangleMeshes.add(new TriangleMesh3D(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+				triangles.clear();
+			}
+			
+			System.out.println(" - Done.");
+			
+			return triangleMeshes;
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Returns a {@code TriangleMesh3D} instance that represents a cube.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3D.createCube("Cube");
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code TriangleMesh3D} instance that represents a cube
+	 */
+//	TODO: Add Unit Tests!
+	public static TriangleMesh3D createCube() {
+		return createCube("Cube");
+	}
+	
+	/**
+	 * Returns a {@code TriangleMesh3D} instance that represents a cube.
+	 * <p>
+	 * If {@code objectName} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param objectName the object name to use
+	 * @return a {@code TriangleMesh3D} instance that represents a cube
+	 * @throws NullPointerException thrown if, and only if, {@code objectName} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static TriangleMesh3D createCube(final String objectName) {
+		Objects.requireNonNull(objectName, "objectName == null");
+		
+		final
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("o " + objectName + "\n");
+		stringBuilder.append("v  1.000000  1.000000 -1.000000\n");
+		stringBuilder.append("v  1.000000 -1.000000 -1.000000\n");
+		stringBuilder.append("v  1.000000  1.000000  1.000000\n");
+		stringBuilder.append("v  1.000000 -1.000000  1.000000\n");
+		stringBuilder.append("v -1.000000  1.000000 -1.000000\n");
+		stringBuilder.append("v -1.000000 -1.000000 -1.000000\n");
+		stringBuilder.append("v -1.000000  1.000000  1.000000\n");
+		stringBuilder.append("v -1.000000 -1.000000  1.000000\n");
+		stringBuilder.append("vn -0.0000  1.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -0.0000  1.0000\n");
+		stringBuilder.append("vn -1.0000 -0.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -1.0000 -0.0000\n");
+		stringBuilder.append("vn  1.0000 -0.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -0.0000 -1.0000\n");
+		stringBuilder.append("vt 0.625000 0.500000\n");
+		stringBuilder.append("vt 0.875000 0.500000\n");
+		stringBuilder.append("vt 0.875000 0.750000\n");
+		stringBuilder.append("vt 0.625000 0.750000\n");
+		stringBuilder.append("vt 0.375000 0.750000\n");
+		stringBuilder.append("vt 0.625000 1.000000\n");
+		stringBuilder.append("vt 0.375000 1.000000\n");
+		stringBuilder.append("vt 0.375000 0.000000\n");
+		stringBuilder.append("vt 0.625000 0.000000\n");
+		stringBuilder.append("vt 0.625000 0.250000\n");
+		stringBuilder.append("vt 0.375000 0.250000\n");
+		stringBuilder.append("vt 0.125000 0.500000\n");
+		stringBuilder.append("vt 0.375000 0.500000\n");
+		stringBuilder.append("vt 0.125000 0.750000\n");
+		stringBuilder.append("f 1/1/1 5/2/1 7/3/1 3/4/1\n");
+		stringBuilder.append("f 4/5/2 3/4/2 7/6/2 8/7/2\n");
+		stringBuilder.append("f 8/8/3 7/9/3 5/10/3 6/11/3\n");
+		stringBuilder.append("f 6/12/4 2/13/4 4/5/4 8/14/4\n");
+		stringBuilder.append("f 2/13/5 1/1/5 3/4/5 4/5/5\n");
+		stringBuilder.append("f 6/11/6 5/10/6 1/1/6 2/13/6\n");
+		
+		return readWavefrontObjectFromString(stringBuilder.toString(), false, 1.0D, true).get(0);
+	}
+	
+	/**
 	 * Reads a Geo file into a {@code TriangleMesh3D} instance.
 	 * <p>
 	 * Returns a {@code TriangleMesh3D} instance.
@@ -1133,6 +1332,72 @@ public final class TriangleMesh3D implements Shape3D {
 			String currentObjectName = "";
 			
 			try(final BufferedReader bufferedReader = new BufferedReader(new FileReader(Objects.requireNonNull(file, "file == null")))) {
+				for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+					final String[] elements = line.split("\\s+");
+					
+					if(elements.length > 0) {
+						switch(elements[0]) {
+							case "#":
+								continue;
+							case "f":
+								for(int i = 0; i < elements.length - 3; i++) {
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[1 + 0]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[2 + i]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[3 + i]));
+								}
+								
+								break;
+							case "g":
+								currentGroupName = elements[1];
+								
+								break;
+							case "o":
+								currentObjectName = elements[1];
+								
+								break;
+							case "usemtl":
+								currentMaterialName = elements[1];
+								
+								break;
+							case "v":
+								defaultObjectModel.addPosition(new Point4D(Double.parseDouble(elements[1]), Double.parseDouble(elements[2]), Double.parseDouble(elements[3])));
+								
+								break;
+							case "vn":
+								defaultObjectModel.addNormal(new Vector3D(Double.parseDouble(elements[1]), Double.parseDouble(elements[2]), Double.parseDouble(elements[3])));
+								
+								break;
+							case "vt":
+								defaultObjectModel.addTextureCoordinates(new Point2D(Double.parseDouble(elements[1]), isFlippingTextureCoordinateY ? 1.0D - Double.parseDouble(elements[2]) : Double.parseDouble(elements[2])));
+								
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+			
+			return defaultObjectModel;
+		}
+		
+		public static DefaultObjectModel parseDefaultObjectModel(final String string, final boolean isFlippingTextureCoordinateY) throws IOException {
+			final DefaultObjectModel defaultObjectModel = new DefaultObjectModel();
+			
+			String currentGroupName = "";
+			String currentMaterialName = "";
+			String currentObjectName = "";
+			
+			try(final BufferedReader bufferedReader = new BufferedReader(new StringReader(Objects.requireNonNull(string, "string == null")))) {
 				for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
 					final String[] elements = line.split("\\s+");
 					

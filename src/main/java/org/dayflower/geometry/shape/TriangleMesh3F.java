@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 - 2024 J&#246;rgen Lundgren
+ * Copyright 2014 - 2025 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;//TODO: Add Unit Tests!
 import java.util.ArrayList;
@@ -820,6 +821,204 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
+	 * Reads a Wavefront Object string into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code string} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param string a {@code String} instance with the content to read
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code string} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+//	TODO: Add Unit Tests!
+	public static List<TriangleMesh3F> readWavefrontObjectFromString(final String string, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
+		try {
+			System.out.println("Loading triangle meshes from a string...");
+			
+			final DefaultObjectModel defaultObjectModel = DefaultObjectModel.parseDefaultObjectModel(Objects.requireNonNull(string, "string == null"), isFlippingTextureCoordinateY);
+			
+			final IndexedObjectModel indexedObjectModel = defaultObjectModel.toIndexedObjectModel();
+			
+			final List<Integer> indices = indexedObjectModel.getIndices();
+			final List<Point2F> textureCoordinates = indexedObjectModel.getTextureCoordinates();
+			final List<Point4F> positions = indexedObjectModel.getPositions();
+			final List<String> groupNames = indexedObjectModel.getGroupNames();
+			final List<String> materialNames = indexedObjectModel.getMaterialNames();
+			final List<String> objectNames = indexedObjectModel.getObjectNames();
+			final List<Vector3F> normals = indexedObjectModel.getNormals();
+//			final List<Vector3F> tangents = indexedObjectModel.getTangents();
+			final List<Triangle3F> triangles = new ArrayList<>();
+			final List<TriangleMesh3F> triangleMeshes = new ArrayList<>();
+			
+			String previousGroupName = "";
+			String previousMaterialName = "";
+			String previousObjectName = "";
+			
+			final boolean isScaling = !Floats.equals(scale, 1.0F);
+			
+			final int maximumCount = Integer.MAX_VALUE;
+			
+			final Matrix44F matrix = isScaling ? Matrix44F.scale(scale) : null;
+			
+			if(matrix != null && !matrix.isInvertible()) {
+				return new ArrayList<>();
+			}
+			
+			final Matrix44F matrixInverse = isScaling ? Matrix44F.inverse(matrix) : null;
+			
+			for(int i = 0, j = 0; i < indices.size(); i += 3) {
+				final int indexA = indices.get(i + 0).intValue();
+				final int indexB = indices.get(i + 1).intValue();
+				final int indexC = indices.get(i + 2).intValue();
+				
+				final String currentGroupName = groupNames.get(indexA);
+				final String currentMaterialName = materialNames.get(indexA);
+				final String currentObjectName = objectNames.get(indexA);
+				
+				if(!previousGroupName.equals(currentGroupName) || !previousMaterialName.equals(currentMaterialName)) {
+					if(triangles.size() > 0) {
+						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+						
+						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+						triangles.clear();
+						
+						if(++j >= maximumCount) {
+							break;
+						}
+					}
+					
+					if(!previousGroupName.equals(currentGroupName)) {
+						previousGroupName = currentGroupName;
+					}
+					
+					if(!previousMaterialName.equals(currentMaterialName)) {
+						previousMaterialName = currentMaterialName;
+					}
+				}
+				
+				if(!previousObjectName.equals(currentObjectName)) {
+					previousObjectName = currentObjectName;
+				}
+				
+				final Point2F textureCoordinatesA = textureCoordinates.get(indexA);
+				final Point2F textureCoordinatesB = textureCoordinates.get(indexB);
+				final Point2F textureCoordinatesC = textureCoordinates.get(indexC);
+				
+				final Point4F positionA = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
+				final Point4F positionB = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
+				final Point4F positionC = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
+				
+				final Vector3F normalA = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
+				final Vector3F normalB = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
+				final Vector3F normalC = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
+				
+//				final Vector3F tangentA = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+//				final Vector3F tangentB = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+//				final Vector3F tangentC = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
+				
+				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA);
+				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB);
+				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC);
+				
+				final Triangle3F triangle = new Triangle3F(a, b, c);
+				
+				triangles.add(triangle);
+			}
+			
+			if(triangles.size() > 0) {
+				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+				
+				triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+				triangles.clear();
+			}
+			
+			System.out.println(" - Done.");
+			
+			return triangleMeshes;
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Returns a {@code TriangleMesh3F} instance that represents a cube.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.createCube("Cube");
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code TriangleMesh3F} instance that represents a cube
+	 */
+//	TODO: Add Unit Tests!
+	public static TriangleMesh3F createCube() {
+		return createCube("Cube");
+	}
+	
+	/**
+	 * Returns a {@code TriangleMesh3F} instance that represents a cube.
+	 * <p>
+	 * If {@code objectName} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param objectName the object name to use
+	 * @return a {@code TriangleMesh3F} instance that represents a cube
+	 * @throws NullPointerException thrown if, and only if, {@code objectName} is {@code null}
+	 */
+//	TODO: Add Unit Tests!
+	public static TriangleMesh3F createCube(final String objectName) {
+		Objects.requireNonNull(objectName, "objectName == null");
+		
+		final
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("o " + objectName + "\n");
+		stringBuilder.append("v  1.000000  1.000000 -1.000000\n");
+		stringBuilder.append("v  1.000000 -1.000000 -1.000000\n");
+		stringBuilder.append("v  1.000000  1.000000  1.000000\n");
+		stringBuilder.append("v  1.000000 -1.000000  1.000000\n");
+		stringBuilder.append("v -1.000000  1.000000 -1.000000\n");
+		stringBuilder.append("v -1.000000 -1.000000 -1.000000\n");
+		stringBuilder.append("v -1.000000  1.000000  1.000000\n");
+		stringBuilder.append("v -1.000000 -1.000000  1.000000\n");
+		stringBuilder.append("vn -0.0000  1.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -0.0000  1.0000\n");
+		stringBuilder.append("vn -1.0000 -0.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -1.0000 -0.0000\n");
+		stringBuilder.append("vn  1.0000 -0.0000 -0.0000\n");
+		stringBuilder.append("vn -0.0000 -0.0000 -1.0000\n");
+		stringBuilder.append("vt 0.625000 0.500000\n");
+		stringBuilder.append("vt 0.875000 0.500000\n");
+		stringBuilder.append("vt 0.875000 0.750000\n");
+		stringBuilder.append("vt 0.625000 0.750000\n");
+		stringBuilder.append("vt 0.375000 0.750000\n");
+		stringBuilder.append("vt 0.625000 1.000000\n");
+		stringBuilder.append("vt 0.375000 1.000000\n");
+		stringBuilder.append("vt 0.375000 0.000000\n");
+		stringBuilder.append("vt 0.625000 0.000000\n");
+		stringBuilder.append("vt 0.625000 0.250000\n");
+		stringBuilder.append("vt 0.375000 0.250000\n");
+		stringBuilder.append("vt 0.125000 0.500000\n");
+		stringBuilder.append("vt 0.375000 0.500000\n");
+		stringBuilder.append("vt 0.125000 0.750000\n");
+		stringBuilder.append("f 1/1/1 5/2/1 7/3/1 3/4/1\n");
+		stringBuilder.append("f 4/5/2 3/4/2 7/6/2 8/7/2\n");
+		stringBuilder.append("f 8/8/3 7/9/3 5/10/3 6/11/3\n");
+		stringBuilder.append("f 6/12/4 2/13/4 4/5/4 8/14/4\n");
+		stringBuilder.append("f 2/13/5 1/1/5 3/4/5 4/5/5\n");
+		stringBuilder.append("f 6/11/6 5/10/6 1/1/6 2/13/6\n");
+		
+		return readWavefrontObjectFromString(stringBuilder.toString(), false, 1.0F, true).get(0);
+	}
+	
+	/**
 	 * Reads a Geo file into a {@code TriangleMesh3F} instance.
 	 * <p>
 	 * Returns a {@code TriangleMesh3F} instance.
@@ -1135,6 +1334,72 @@ public final class TriangleMesh3F implements Shape3F {
 			String currentObjectName = "";
 			
 			try(final BufferedReader bufferedReader = new BufferedReader(new FileReader(Objects.requireNonNull(file, "file == null")))) {
+				for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+					final String[] elements = line.split("\\s+");
+					
+					if(elements.length > 0) {
+						switch(elements[0]) {
+							case "#":
+								continue;
+							case "f":
+								for(int i = 0; i < elements.length - 3; i++) {
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[1 + 0]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[2 + i]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[3 + i]));
+								}
+								
+								break;
+							case "g":
+								currentGroupName = elements[1];
+								
+								break;
+							case "o":
+								currentObjectName = elements[1];
+								
+								break;
+							case "usemtl":
+								currentMaterialName = elements[1];
+								
+								break;
+							case "v":
+								defaultObjectModel.addPosition(new Point4F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								
+								break;
+							case "vn":
+								defaultObjectModel.addNormal(new Vector3F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								
+								break;
+							case "vt":
+								defaultObjectModel.addTextureCoordinates(new Point2F(Float.parseFloat(elements[1]), isFlippingTextureCoordinateY ? 1.0F - Float.parseFloat(elements[2]) : Float.parseFloat(elements[2])));
+								
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+			
+			return defaultObjectModel;
+		}
+		
+		public static DefaultObjectModel parseDefaultObjectModel(final String string, final boolean isFlippingTextureCoordinateY) throws IOException {
+			final DefaultObjectModel defaultObjectModel = new DefaultObjectModel();
+			
+			String currentGroupName = "";
+			String currentMaterialName = "";
+			String currentObjectName = "";
+			
+			try(final BufferedReader bufferedReader = new BufferedReader(new StringReader(Objects.requireNonNull(string, "string == null")))) {
 				for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
 					final String[] elements = line.split("\\s+");
 					

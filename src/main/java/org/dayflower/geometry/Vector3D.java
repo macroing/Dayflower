@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 - 2024 J&#246;rgen Lundgren
+ * Copyright 2014 - 2025 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -1180,6 +1180,24 @@ public final class Vector3D implements Node {
 		final Quaternion4D q2 = Quaternion4D.multiply(q1, q0);
 		
 		return new Vector3D(q2.x, q2.y, q2.z);
+	}
+	
+	/**
+	 * Subtracts the component values of {@code pRHS} from the component values of {@code pLHS}.
+	 * <p>
+	 * Returns a new {@code Vector3D} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code pLHS} or {@code pRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector subtraction is performed componentwise.
+	 * 
+	 * @param pLHS the {@code Point3D} instance on the left-hand side
+	 * @param pRHS the {@code Point3D} instance on the right-hand side
+	 * @return a new {@code Vector3D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code pLHS} or {@code pRHS} are {@code null}
+	 */
+	public static Vector3D subtract(final Point3D pLHS, final Point3D pRHS) {
+		return new Vector3D(pLHS.x - pRHS.x, pLHS.y - pRHS.y, pLHS.z - pRHS.z);
 	}
 	
 	/**

@@ -1,3 +1,13 @@
+2025-11-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add the methods createCube(), createCube(String) and readWavefrontObjectFromString(String, boolean, double, boolean) to the TriangleMesh3D class.
+	* ADD:		Add the methods createCube(), createCube(String) and readWavefrontObjectFromString(String, boolean, float, boolean) to the TriangleMesh3F class.
+	* ADD:		Add the method subtract(Point3D, Point3D) to the Vector3D class.
+	* ADD:		Add the method subtract(Point3F, Point3F) to the Vector3F class.
+	* ADD:		Add an ImageSceneLoader class.
+	* ADD:		Add four images. Three of which are used by the ImageSceneLoader to create a scene. The fourth can be used to generate a scene with the ImageSceneLoader class.
+	* CHANGE:	Update the copyright notice.
+
 2024-05-08  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix bugs in the Disney material in the GPU-renderer.

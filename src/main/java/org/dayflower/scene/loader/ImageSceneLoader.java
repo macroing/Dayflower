@@ -67,6 +67,8 @@ public final class ImageSceneLoader implements SceneLoader {
 	private static final Texture GRASS_TEXTURE = LDRImageTexture.undoGammaCorrectionSRGB(LDRImageTexture.load("./resources/textures/Texture_2.png", AngleF.degrees(0.0F), new Vector2F(0.1F, 0.1F)));
 	private static final Texture WALL_TEXTURE = LDRImageTexture.undoGammaCorrectionSRGB(LDRImageTexture.load("./resources/textures/Wall.jpg", AngleF.degrees(0.0F), new Vector2F(16.0F, 16.0F)));
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final List<LineSegment3I> horizontalLineSegments;
 	private final List<LineSegment3I> horizontalLineSegmentsOuter;
 	private final List<LineSegment3I> verticalLineSegments;
@@ -189,7 +191,7 @@ public final class ImageSceneLoader implements SceneLoader {
 		scene.addPrimitive(new Primitive(new MatteMaterial(GRASS_TEXTURE), new Plane3F(), new Transform(new Point3F(0.0F, -0.1F, 0.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(90.0F))))));
 		scene.addLight(new PerezLight());
 		scene.setCamera(camera);
-		scene.setName("Bugatti");
+		scene.setName("Image");
 		scene.buildAccelerationStructure();
 		
 		return scene;
@@ -331,7 +333,7 @@ public final class ImageSceneLoader implements SceneLoader {
 	
 	private void doGenerateHorizontalWalls(final Scene scene) {
 		final float scaleX = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
-		final float scaleY = -(255.0F * 32.0F / 32.0F);
+		final float scaleY = 255.0F * 32.0F / 32.0F;
 		final float scaleZ = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
 		
 		for(int i = 0; i < this.horizontalLineSegments.size(); i++) {
@@ -340,11 +342,11 @@ public final class ImageSceneLoader implements SceneLoader {
 //			We need to swap the axes for X, Y and Z:
 			
 			final float startX = horizontalLineSegment.getStartX();
-			final float startY = -horizontalLineSegment.getStartZ();
+			final float startY = horizontalLineSegment.getStartZ();
 			final float startZ = horizontalLineSegment.getStartY();
 			
 			final float endX = horizontalLineSegment.getEndX();
-//			final float endY = -horizontalLineSegment.getEndZ();
+//			final float endY = horizontalLineSegment.getEndZ();
 			final float endZ = horizontalLineSegment.getEndY();
 			
 			final float startXScaled = startX / scaleX;
@@ -616,7 +618,7 @@ public final class ImageSceneLoader implements SceneLoader {
 		
 		if(this.horizontalLineSegmentsOuter.size() > 0) {
 			final float scaleX = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
-			final float scaleY = -(255.0F * 32.0F / 32.0F);
+			final float scaleY = 255.0F * 32.0F / 32.0F;
 			final float scaleZ = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
 			
 			final List<LineSegment3I> outerLineSegments = this.horizontalLineSegmentsOuter.get(0).getConnectionList();
@@ -631,11 +633,11 @@ public final class ImageSceneLoader implements SceneLoader {
 				final boolean isVertical = lineSegment.getStartX() == lineSegment.getEndX();
 				
 				final float startX = lineSegment.getStartX();
-				final float startY = -0.0F;
+				final float startY = 0.0F;
 				final float startZ = lineSegment.getStartY();
 				
 				final float endX = lineSegment.getEndX();
-				final float endY = -0.0F;
+				final float endY = 0.0F;
 				final float endZ = lineSegment.getEndY();
 				
 				final float startXScaled = startX / scaleX;
@@ -712,7 +714,7 @@ public final class ImageSceneLoader implements SceneLoader {
 	
 	private void doGenerateVerticalWalls(final Scene scene) {
 		final float scaleX = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
-		final float scaleY = -(255.0F * 32.0F / 32.0F);
+		final float scaleY = 255.0F * 32.0F / 32.0F;
 		final float scaleZ = Floats.max(this.resolutionX, this.resolutionY) / 32.0F;
 		
 		for(int i = 0; i < this.verticalLineSegments.size(); i++) {
@@ -721,11 +723,11 @@ public final class ImageSceneLoader implements SceneLoader {
 //			We need to swap the axes for X, Y and Z:
 			
 			final float startX = verticalLineSegment.getStartX();
-			final float startY = -verticalLineSegment.getStartZ();
+			final float startY = verticalLineSegment.getStartZ();
 			final float startZ = verticalLineSegment.getStartY();
 			
 			final float endX = verticalLineSegment.getEndX();
-//			final float endY = -verticalLineSegment.getEndZ();
+//			final float endY = verticalLineSegment.getEndZ();
 			final float endZ = verticalLineSegment.getEndY();
 			
 			final float startXScaled = startX / scaleX;

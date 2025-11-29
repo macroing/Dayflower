@@ -1,3 +1,7 @@
+2025-11-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Fix bugs in the usage of the nextAfter(float, float) method in the GPU-renderer.
+
 2025-11-27  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* ADD:		Add the methods createCube(), createCube(String) and readWavefrontObjectFromString(String, boolean, double, boolean) to the TriangleMesh3D class.

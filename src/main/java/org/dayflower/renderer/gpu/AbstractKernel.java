@@ -1802,8 +1802,8 @@ public abstract class AbstractKernel extends Kernel {
 //	TODO: Add Javadocs!
 	protected final void eFloatSetAdd(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
 		this.eFloatArray_$private$9[index * 3 + 0] = aValue + bValue;
-		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound + bLowerBound, -1);
-		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound + bUpperBound, +1);
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound + bLowerBound, aLowerBound + bLowerBound - 1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound + bUpperBound, aUpperBound + bUpperBound + 1);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1823,8 +1823,8 @@ public abstract class AbstractKernel extends Kernel {
 			final float div2 = aLowerBound / bUpperBound;
 			final float div3 = aUpperBound / bUpperBound;
 			
-			final float lowerBound = nextAfter(min(min(div0, div1), min(div2, div3)), -1);
-			final float upperBound = nextAfter(max(max(div0, div1), max(div2, div3)), +1);
+			final float lowerBound = nextAfter(min(min(div0, div1), min(div2, div3)), min(min(div0, div1), min(div2, div3)) - 1);
+			final float upperBound = nextAfter(max(max(div0, div1), max(div2, div3)), max(max(div0, div1), max(div2, div3)) + 1);
 			
 			this.eFloatArray_$private$9[index * 3 + 0] = value;
 			this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
@@ -1841,8 +1841,8 @@ public abstract class AbstractKernel extends Kernel {
 		final float prod2 = aLowerBound * bUpperBound;
 		final float prod3 = aUpperBound * bUpperBound;
 		
-		final float lowerBound = nextAfter(min(min(prod0, prod1), min(prod2, prod3)), -1);
-		final float upperBound = nextAfter(max(max(prod0, prod1), max(prod2, prod3)), +1);
+		final float lowerBound = nextAfter(min(min(prod0, prod1), min(prod2, prod3)), min(min(prod0, prod1), min(prod2, prod3)) - 1);
+		final float upperBound = nextAfter(max(max(prod0, prod1), max(prod2, prod3)), max(max(prod0, prod1), max(prod2, prod3)) + 1);
 		
 		this.eFloatArray_$private$9[index * 3 + 0] = value;
 		this.eFloatArray_$private$9[index * 3 + 1] = lowerBound;
@@ -1859,15 +1859,15 @@ public abstract class AbstractKernel extends Kernel {
 //	TODO: Add Javadocs!
 	protected final void eFloatSetSqrt(final int index, final float value, final float lowerBound, final float upperBound) {
 		this.eFloatArray_$private$9[index * 3 + 0] = sqrt(value);
-		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(sqrt(lowerBound), -1);
-		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(sqrt(upperBound), +1);
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(sqrt(lowerBound), sqrt(lowerBound) - 1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(sqrt(upperBound), sqrt(upperBound) + 1);
 	}
 	
 //	TODO: Add Javadocs!
 	protected final void eFloatSetSubtract(final int index, final float aValue, final float aLowerBound, final float aUpperBound, final float bValue, final float bLowerBound, final float bUpperBound) {
 		this.eFloatArray_$private$9[index * 3 + 0] = aValue - bValue;
-		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound - bUpperBound, -1);
-		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound - bLowerBound, +1);
+		this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(aLowerBound - bUpperBound, aLowerBound - bUpperBound - 1);
+		this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(aUpperBound - bLowerBound, aUpperBound - bLowerBound + 1);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1883,8 +1883,8 @@ public abstract class AbstractKernel extends Kernel {
 			this.eFloatArray_$private$9[index * 3 + 2] = value;
 		} else {
 			this.eFloatArray_$private$9[index * 3 + 0] = value;
-			this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(value - error, -1);
-			this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(value + error, +1);
+			this.eFloatArray_$private$9[index * 3 + 1] = nextAfter(value - error, value - error - 1);
+			this.eFloatArray_$private$9[index * 3 + 2] = nextAfter(value + error, value + error + 1);
 		}
 	}
 	

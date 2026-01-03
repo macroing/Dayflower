@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 - 2025 J&#246;rgen Lundgren
+ * Copyright 2014 - 2026 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -760,7 +760,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return the G-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0]
 	 */
 	protected final float colorRGBEIntToGFloat(final int colorRGBE) {
-        return this.exponents[colorRGBE & 0xFF] * (((colorRGBE >> 16) & 0xFF) + 0.5F);
+		return this.exponents[colorRGBE & 0xFF] * (((colorRGBE >> 16) & 0xFF) + 0.5F);
 	}
 	
 	/**
@@ -770,7 +770,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return the R-component of {@code colorRGBE} as a {@code float} in the interval [0.0, 1.0]
 	 */
 	protected final float colorRGBEIntToRFloat(final int colorRGBE) {
-        return this.exponents[colorRGBE & 0xFF] * ((colorRGBE >>> 24) + 0.5F);
+		return this.exponents[colorRGBE & 0xFF] * ((colorRGBE >>> 24) + 0.5F);
 	}
 	
 	/**

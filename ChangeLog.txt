@@ -1,3 +1,7 @@
+2026-01-03  Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Update the copyright notice.
+
 2025-11-29  Jörgen Lundgren  <joergen.lundgren@macroing.org>
 
 	* CHANGE:	Fix bugs in the usage of the nextAfter(float, float) method in the GPU-renderer.

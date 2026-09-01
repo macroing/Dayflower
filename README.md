@@ -221,7 +221,6 @@ Dependencies
  - [Aparapi](https://aparapi.com/)
  - [Apache / Commons / BCEL](https://commons.apache.org/proper/commons-bcel/)
  - [Macroing / Java](https://github.com/macroing/Java)
- - [Macroing / Art4J](https://github.com/macroing/Art4J)
 
 References
 ----------

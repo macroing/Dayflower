@@ -60,6 +60,7 @@ public final class ScreenRendererApplication extends Application {
 	private static final String OPERATION_BOX_BLUR = "Box Blur";
 	private static final String OPERATION_EMBOSS = "Emboss";
 	private static final String OPERATION_FRACTIONAL_BROWNIAN_MOTION = "Fractional Brownian Motion";
+	private static final String OPERATION_GRAYSCALE_RELATIVE_LUMINANCE = "Grayscale Relative Luminance";
 	private static final String OPERATION_NONE = "None";
 	private static final String OPERATION_RANDOM = "Random";
 	private static final String OPERATION_RIDGE_DETECTION = "Ridge Detection";
@@ -177,6 +178,7 @@ public final class ScreenRendererApplication extends Application {
 		comboBox.getItems().add(OPERATION_BOX_BLUR);
 		comboBox.getItems().add(OPERATION_EMBOSS);
 		comboBox.getItems().add(OPERATION_FRACTIONAL_BROWNIAN_MOTION);
+		comboBox.getItems().add(OPERATION_GRAYSCALE_RELATIVE_LUMINANCE);
 		comboBox.getItems().add(OPERATION_NONE);
 		comboBox.getItems().add(OPERATION_RANDOM);
 		comboBox.getItems().add(OPERATION_RIDGE_DETECTION);
@@ -234,6 +236,11 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
+					case OPERATION_GRAYSCALE_RELATIVE_LUMINANCE:
+						doSetOperation(function, (colorOld) -> Color4F.grayscaleRelativeLuminance(colorOld));
+//						doSetOperation(function, (colorOld) -> colorOld.relativeLuminance() > 0.5F ? Color4F.blend(Color4F.BLACK, Color4F.RED, colorOld.relativeLuminance()) : Color4F.blend(Color4F.WHITE, Color4F.GREEN, 1.0F - colorOld.relativeLuminance()));
+						
+						break;
 					case OPERATION_NONE:
 						function.set(pixelImage -> pixelImage);
 						
@@ -279,6 +286,14 @@ public final class ScreenRendererApplication extends Application {
 				}
 			}
 		};
+	}
+	
+	private static void doSetOperation(final AtomicReference<Function<ImageF, ImageF>> function, final Function<Color4F, Color4F> functionColor) {
+		function.set(pixelImage -> {
+			pixelImage.fillShape(pixelImage.getBounds(), (colorOld, point) -> functionColor.apply(colorOld));
+			
+			return pixelImage;
+		});
 	}
 	
 	private static void doSetOperationBlend(final AtomicReference<Function<ImageF, ImageF>> function, final Color4F colorNew) {
